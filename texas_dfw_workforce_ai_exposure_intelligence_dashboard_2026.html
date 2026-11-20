@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Texas & DFW Workforce & AI Exposure Intelligence Dashboard (2026)</title>
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            slate: {
+              900: '#0F172A',
+              800: '#1E293B',
+              700: '#334155',
+              600: '#475569',
+              500: '#64748B',
+              400: '#94A3B8',
+              200: '#E2E8F0',
+              100: '#F1F5F9',
+              50: '#F8FAFC',
+            },
+            teal: {
+              600: '#0D9488',
+              700: '#0F766E',
+              50: '#F0FDFA',
+              100: '#CCFBF1',
+            },
+            amber: {
+              600: '#D97706',
+              700: '#B45309',
+              50: '#FFFBEB',
+              100: '#FEF3C7',
+            },
+            coral: {
+              600: '#E11D48',
+              700: '#BE123C',
+              50: '#FFF1F2',
+              100: '#FFE4E6',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+      -webkit-font-smoothing: antialiased;
+    }
+    .intel-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 4px 14px rgba(15, 23, 42, 0.02);
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .intel-card:hover {
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+    .nav-chapter-link.active {
+      background-color: #0F172A;
+      color: #FFFFFF;
+      border-color: #0F172A;
+    }
+    .nav-chapter-link.active .chapter-num {
+      background-color: #0D9488;
+      color: #FFFFFF;
+    }
+    /* Custom subtle scrollbar for SOC table */
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #F1F5F9;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+  </style>
+</head>
+<body class="font-sans text-slate-900">
+
+  <!-- TOP EXECUTIVE CONTROL BAR -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3.5">
+        <!-- Brand / Report Title -->
+        <div class="flex items-start sm:items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0 font-display font-extrabold text-sm tracking-tight shadow-xs">
+            TX<span class="text-teal-400">AI</span>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-teal-700">
+              <span>Workforce &amp; Generative AI Intelligence Brief</span>
+              <span class="text-slate-300">•</span>
+              <span class="text-slate-500">2026 Edition</span>
+            </div>
+            <h1 class="font-display text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">
+              Texas &amp; DFW Workforce &amp; AI Exposure Intelligence Dashboard (2026)
+            </h1>
+          </div>
+        </div>
+
+        <!-- Executive Controls: Region Toggle, View Mode, CSV Export -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Region Toggle -->
+          <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200" role="group" aria-label="Region Toggle">
+            <button id="btn-region-tx" onclick="setRegion('TX')"
+              class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-slate-900 text-white shadow-xs">
+              Texas Statewide
+            </button>
+            <button id="btn-region-dfw" onclick="setRegion('DFW')"
+              class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+              Dallas–Fort Worth MSA
+            </button>
+          </div>
+
+          <!-- View Mode Toggle -->
+          <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200" role="group" aria-label="View Mode">
+            <button id="btn-view-story" onclick="setViewMode('STORY')"
+              class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-teal-600 text-white shadow-xs">
+              Executive Story
+            </button>
+            <button id="btn-view-explorer" onclick="setViewMode('EXPLORER')"
+              class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+              SOC Occupation Explorer
+            </button>
+          </div>
+
+          <!-- Download CSV Summary -->
+          <button onclick="downloadCSVSummary()"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 shadow-xs transition-all">
+            <svg class="w-3.5 h-3.5 text-teal-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span>Download CSV Summary</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT: LEFT STICKY CHAPTER NAVIGATION + RIGHT STORYTELLING CANVAS -->
+  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+    <div class="flex flex-col lg:flex-row gap-7 items-start">
+
+      <!-- LEFT STICKY STORYTELLING CHAPTER NAVIGATION BAR -->
+      <aside id="left-sidebar" class="w-full lg:w-68 xl:w-72 shrink-0 lg:sticky lg:top-24 space-y-4">
+        <div class="intel-card rounded-2xl p-4">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-2 mb-2.5">
+            Intelligence Chapters
+          </div>
+          <nav class="grid grid-cols-2 lg:grid-cols-1 gap-1.5" aria-label="Storytelling Chapters">
+            <a href="#chapter-1" onclick="activateChapterLink(this)"
+              class="nav-chapter-link active flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-transparent text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-all">
+              <span class="chapter-num w-5 h-5 rounded-md bg-slate-200 text-slate-700 flex items-center justify-center text-[11px] font-extrabold shrink-0">1</span>
+              <span class="truncate">The Big Picture</span>
+            </a>
+            <a href="#chapter-2" onclick="activateChapterLink(this)"
+              class="nav-chapter-link flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-transparent text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-all">
+              <span class="chapter-num w-5 h-5 rounded-md bg-slate-200 text-slate-700 flex items-center justify-center text-[11px] font-extrabold shrink-0">2</span>
+              <span class="truncate">Sector Momentum Matrix</span>
+            </a>
+            <a href="#chapter-3" onclick="activateChapterLink(this)"
+              class="nav-chapter-link flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-transparent text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-all">
+              <span class="chapter-num w-5 h-5 rounded-md bg-slate-200 text-slate-700 flex items-center justify-center text-[11px] font-extrabold shrink-0">3</span>
+              <span class="truncate">SOC AI Exposure Explorer</span>
+            </a>
+            <a href="#chapter-4" onclick="activateChapterLink(this)"
+              class="nav-chapter-link flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-transparent text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-all">
+              <span class="chapter-num w-5 h-5 rounded-md bg-slate-200 text-slate-700 flex items-center justify-center text-[11px] font-extrabold shrink-0">4</span>
+              <span class="truncate">DFW Talent Corridors</span>
+            </a>
+          </nav>
+        </div>
+
+        <!-- Research Synthesis Callout Box -->
+        <div class="intel-card rounded-2xl p-4 bg-slate-900 text-white border-slate-800 hidden lg:block">
+          <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-teal-400 mb-2">
+            <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+            <span>Research Synthesis</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Combines <strong class="text-white">BEA/BLS 2026</strong> Texas &amp; DFW labor statistics with <strong class="text-teal-300">Anthropic Observed AI Exposure</strong> (O*NET task penetration) and <strong class="text-amber-300">World Bank GenAI</strong> hiring elasticity benchmarks.
+          </p>
+          <div class="mt-3 pt-3 border-t border-slate-800 space-y-2 text-[11px]">
+            <div class="flex justify-between">
+              <span class="text-slate-400">Highest SOC Exposure:</span>
+              <span class="font-bold text-coral-400">15-1251 (74.5%)</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">TX Info Sector YoY:</span>
+              <span class="font-bold text-coral-400">-3.9% Restructuring</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Physical Build-Out:</span>
+              <span class="font-bold text-teal-400">+2.1% Construction</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RIGHT STORYTELLING CONTENT COLUMN -->
+      <main class="flex-1 min-w-0 space-y-8">
+
+        <!-- =============================================================== -->
+        <!-- CHAPTER 1: THE BIG PICTURE — TEXAS & DFW GROWTH ENGINE          -->
+        <!-- =============================================================== -->
+        <section id="chapter-1" class="story-chapter scroll-mt-24 space-y-5">
+          <!-- Narrative Header Banner -->
+          <div class="intel-card rounded-2xl p-6 sm:p-7 border-l-4 border-l-teal-600">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+              <div class="space-y-2 max-w-3xl">
+                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-teal-50 text-teal-700 text-xs font-bold">
+                  <span>CHAPTER 01</span>
+                  <span>•</span>
+                  <span id="ch1-region-badge">TEXAS STATEWIDE MACRO &amp; AI READINESS</span>
+                </div>
+                <h2 id="ch1-headline" class="font-display text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug">
+                  The Big Picture: Texas Outpaces U.S. Job Growth 3-to-1 While Navigating White-Collar AI Restructuring
+                </h2>
+                <p id="ch1-narrative" class="text-sm text-slate-600 leading-relaxed">
+                  With <strong class="text-slate-900">14.46 million nonfarm jobs</strong> (+1.0% YoY vs. +0.3% U.S.) and a <strong class="text-slate-900">$2.93 trillion economy</strong>, Texas’s physical infrastructure and corporate relocation engine remains resilient. However, <strong class="text-teal-700">34.2% of Texas’s workforce</strong> sits in high-AI-exposure white-collar and administrative roles—making workforce AI augmentation a central board-level priority.
+                </p>
+              </div>
+              <div class="shrink-0 bg-slate-50 border border-slate-200 rounded-xl p-4 min-w-[235px] space-y-2 text-xs">
+                <div class="font-bold uppercase tracking-wider text-slate-400 text-[11px]">Cross-Benchmark Pulse</div>
+                <div class="flex justify-between py-1 border-b border-slate-200/70">
+                  <span class="text-slate-600">TX vs. U.S. Job Growth</span>
+                  <span class="font-bold text-teal-700">+1.0% vs. +0.3%</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-200/70">
+                  <span class="text-slate-600">TX vs. CA Home Value</span>
+                  <span class="font-bold text-teal-700">$294.3K vs. $774.6K</span>
+                </div>
+                <div class="flex justify-between pt-1">
+                  <span class="text-slate-600">DFW Share of TX Jobs</span>
+                  <span class="font-bold text-slate-900">30.1% (4.35M)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Interactive KPI Cards -->
+          <div id="ch1-kpi-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- CHAPTER 2: SECTOR MOMENTUM MATRIX (BUBBLE / QUADRANT CHART)     -->
+        <!-- =============================================================== -->
+        <section id="chapter-2" class="story-chapter scroll-mt-24 intel-card rounded-2xl p-6 sm:p-7">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+            <div>
+              <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-teal-700">
+                <span>Chapter 02</span>
+                <span>•</span>
+                <span>Supersector Growth vs. Observed AI Exposure</span>
+              </div>
+              <h2 id="ch2-title" class="font-display text-lg sm:text-xl font-extrabold text-slate-900 mt-1">
+                Sector Momentum Matrix: Employment Scale, 12-Month Growth &amp; AI Task Exposure
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+                Bubble size = Supersector Employment (000s) • X-Axis = Observed AI Task Exposure (%) • Y-Axis = 12-Month YoY Job Growth (%).
+              </p>
+            </div>
+
+            <!-- Quadrant Filter Pills -->
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+              <button onclick="setQuadrantFilter('ALL')" data-qfilter="ALL"
+                class="q-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white transition-all">
+                All 11 Sectors
+              </button>
+              <button onclick="setQuadrantFilter('TRANSFORM')" data-qfilter="TRANSFORM"
+                class="q-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100 transition-all">
+                High-Growth / High-AI
+              </button>
+              <button onclick="setQuadrantFilter('PHYSICAL')" data-qfilter="PHYSICAL"
+                class="q-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition-all">
+                Physical Engines
+              </button>
+              <button onclick="setQuadrantFilter('RESTRUCTURE')" data-qfilter="RESTRUCTURE"
+                class="q-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-coral-50 text-coral-800 border border-coral-200 hover:bg-coral-100 transition-all">
+                Restructuring
+              </button>
+            </div>
+          </div>
+
+          <!-- Quadrant Legend Strip -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 mt-4 text-[11px]">
+            <div class="px-3 py-2 rounded-xl bg-teal-50/70 border border-teal-200/80">
+              <span class="font-extrabold text-teal-800 block">Top-Right Quadrant</span>
+              <span class="text-slate-600">High-Growth / High-AI Transformation (e.g., Prof. &amp; Business Services +2.0%)</span>
+            </div>
+            <div class="px-3 py-2 rounded-xl bg-amber-50/70 border border-amber-200/80">
+              <span class="font-extrabold text-amber-800 block">Top-Left Quadrant</span>
+              <span class="text-slate-600">Physical &amp; Infrastructure Growth Engines (e.g., Construction +2.1%, Mfg +1.3%)</span>
+            </div>
+            <div class="px-3 py-2 rounded-xl bg-slate-100/80 border border-slate-200">
+              <span class="font-extrabold text-slate-800 block">Bottom-Left Quadrant</span>
+              <span class="text-slate-600">Mature / Stable Core (e.g., Government 0.0%, Mining &amp; Logging -0.5%)</span>
+            </div>
+            <div class="px-3 py-2 rounded-xl bg-coral-50/70 border border-coral-200/80">
+              <span class="font-extrabold text-coral-800 block">Bottom-Right Quadrant</span>
+              <span class="text-slate-600">Restructuring / AI-Exposed (e.g., Information -3.9% YoY, Finance -0.1% TX)</span>
+            </div>
+          </div>
+
+          <!-- Bubble / Scatter Quadrant Canvas -->
+          <div class="mt-5" style="position: relative; width: 100%; height: 430px;">
+            <canvas id="sectorBubbleChart"></canvas>
+          </div>
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- CHAPTER 3: OCCUPATION-LEVEL AI EXPOSURE EXPLORER (SOC CODES)    -->
+        <!-- =============================================================== -->
+        <section id="chapter-3" class="scroll-mt-24 intel-card rounded-2xl p-6 sm:p-7 space-y-6">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+            <div>
+              <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-teal-700">
+                <span>Chapter 03</span>
+                <span>•</span>
+                <span>Anthropic O*NET Observed Exposure &amp; World Bank Demand Synthesis</span>
+              </div>
+              <h2 class="font-display text-lg sm:text-xl font-extrabold text-slate-900 mt-1">
+                Occupation-Level AI Exposure &amp; Workforce Vulnerability Explorer
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+                Filter by SOC Major Group or search by occupation/code. Click any row or bar to inspect executive talent strategy &amp; entry-level hiring shifts.
+              </p>
+            </div>
+
+            <!-- Filter & Search Controls -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+              <select id="soc-group-filter" onchange="filterOccupations()"
+                class="text-xs font-bold bg-slate-100 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-600">
+                <option value="ALL">All SOC Major Groups (13 Roles)</option>
+                <option value="15-0000">15-0000: Computer &amp; Mathematical</option>
+                <option value="13-0000">13-0000: Business &amp; Financial Operations</option>
+                <option value="11-0000">11-0000: Management Occupations</option>
+                <option value="47-0000">47-0000: Construction &amp; Extraction</option>
+              </select>
+
+              <div class="relative">
+                <input id="soc-search-input" type="text" oninput="filterOccupations()"
+                  placeholder="Search SOC code or title..."
+                  class="w-full sm:w-56 text-xs font-medium bg-white border border-slate-300 text-slate-900 rounded-xl pl-8 pr-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-600" />
+                <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Split Layout: Left Horizontal Bar Chart + Right Executive Talent Strategy Card -->
+          <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+            <!-- Horizontal Bar Chart (7 Cols) -->
+            <div class="xl:col-span-7 bg-slate-50/70 rounded-2xl p-4 sm:p-5 border border-slate-200/80">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-600">Observed AI Task Exposure (%) by 5-Digit SOC</span>
+                <span class="text-[11px] font-semibold text-slate-400">Click bar to inspect strategy</span>
+              </div>
+              <div style="position: relative; width: 100%; height: 370px;">
+                <canvas id="socBarChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Selected Occupation Executive Talent Strategy Card (5 Cols) -->
+            <div id="soc-detail-card" class="xl:col-span-5 rounded-2xl border-2 border-slate-900 bg-white p-5 sm:p-6 shadow-sm">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- Interactive Filterable SOC Table -->
+          <div class="border border-slate-200 rounded-2xl overflow-hidden">
+            <div class="overflow-x-auto custom-scroll">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-900 text-white text-[11px] font-bold uppercase tracking-wider">
+                    <th class="py-3 px-4">SOC Code</th>
+                    <th class="py-3 px-4">Occupation Title</th>
+                    <th class="py-3 px-4">Major Group</th>
+                    <th class="py-3 px-4 text-right">Observed AI Exposure</th>
+                    <th class="py-3 px-4 text-right" id="tbl-col-emp">TX Employment</th>
+                    <th class="py-3 px-4">Primary AI Dynamic</th>
+                  </tr>
+                </thead>
+                <tbody id="soc-table-body" class="divide-y divide-slate-200 text-xs">
+                  <!-- Populated dynamically via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- CHAPTER 4: DFW SUB-REGIONAL TALENT & COUNTY GROWTH CORRIDORS    -->
+        <!-- =============================================================== -->
+        <section id="chapter-4" class="story-chapter scroll-mt-24 intel-card rounded-2xl p-6 sm:p-7 space-y-6">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+            <div>
+              <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-teal-700">
+                <span>Chapter 04</span>
+                <span>•</span>
+                <span>Sub-Regional Talent Pipelines &amp; Corporate Corridors</span>
+              </div>
+              <h2 class="font-display text-lg sm:text-xl font-extrabold text-slate-900 mt-1">
+                DFW Sub-Regional Talent &amp; County Growth Corridors vs. Peer Texas Metros
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+                Comparing DFW’s 4 core counties (7.14M combined residents) against Harris (Houston), Bexar (San Antonio), and Travis (Austin).
+              </p>
+            </div>
+
+            <!-- Metric Toggle for County Chart -->
+            <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200 self-start lg:self-center">
+              <button id="btn-county-pop" onclick="setCountyMetric('pop')"
+                class="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-900 text-white transition-all">
+                Population (Millions)
+              </button>
+              <button id="btn-county-growth" onclick="setCountyMetric('growth')"
+                class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition-all">
+                5-Yr Growth (%)
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            <!-- County Comparison Chart (7 Cols) -->
+            <div class="lg:col-span-7">
+              <div style="position: relative; width: 100%; height: 340px;">
+                <canvas id="countyCorridorChart"></canvas>
+              </div>
+            </div>
+
+            <!-- DFW 4 Core Counties Executive Corridor Cards (5 Cols) -->
+            <div class="lg:col-span-5 space-y-3">
+              <div class="p-4 rounded-xl bg-teal-50/70 border border-teal-200">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-teal-900">Dallas County • 2.66M Pop (+3.8% 5-Yr)</span>
+                  <span class="px-2 py-0.5 rounded-md bg-teal-600 text-white text-[10px] font-bold">Urban Core</span>
+                </div>
+                <p class="text-xs text-slate-700 mt-1.5 leading-relaxed">
+                  Anchors DFW’s <strong>"Y’all Street"</strong> financial district, telecommunications, and corporate HQs (AT&amp;T, CBRE, Southwest Airlines); high white-collar AI augmentation density.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-amber-900">Tarrant County • 2.27M Pop (+6.9% 5-Yr)</span>
+                  <span class="px-2 py-0.5 rounded-md bg-amber-600 text-white text-[10px] font-bold">Industrial Hub</span>
+                </div>
+                <p class="text-xs text-slate-700 mt-1.5 leading-relaxed">
+                  Fort Worth / Arlington aerospace, defense manufacturing (Lockheed Martin, Bell), and Alliance inland port logistics—insulated from white-collar AI displacement.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-slate-900">Collin (1.20M) &amp; Denton (1.01M) Counties</span>
+                  <span class="px-2 py-0.5 rounded-md bg-slate-900 text-white text-[10px] font-bold">+14.2% / +12.8% Growth</span>
+                </div>
+                <p class="text-xs text-slate-700 mt-1.5 leading-relaxed">
+                  North Platinum Corridor (Plano, Frisco, McKinney, Irving/Las Colinas): highest bachelor’s attainment (44%+ in Collin) and dense fintech/enterprise tech campuses.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- METHODOLOGY & SOURCES FOOTER -->
+        <footer class="intel-card rounded-2xl p-5 sm:p-6 bg-slate-900 text-slate-300 border-slate-800">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="text-xs space-y-1">
+              <div class="font-bold text-white">Data Sources &amp; Research Attribution</div>
+              <p class="text-slate-400">
+                Macro &amp; County Data: U.S. BEA, BLS CES/QCEW (Sept 2026), U.S. Census PEP, Zillow ZHVI (Oct 2026). AI Exposure &amp; Hiring Elasticity: Anthropic Economic Index (<em>Observed AI Exposure by 5-Digit SOC</em>) &amp; World Bank (<em>Labor Demand in the Age of Generative AI</em>).
+              </p>
+            </div>
+            <button onclick="downloadCSVSummary()"
+              class="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition-all">
+              <span>Export Dataset (CSV)</span>
+            </button>
+          </div>
+        </footer>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <script>
+    // =========================================================================
+    // 1. STATE & INTEGRATED DATASET
+    // =========================================================================
+    const appState = {
+      region: 'TX',               // 'TX' | 'DFW'
+      viewMode: 'STORY',          // 'STORY' | 'EXPLORER'
+      quadrantFilter: 'ALL',      // 'ALL' | 'TRANSFORM' | 'PHYSICAL' | 'RESTRUCTURE'
+      selectedSocCode: '15-1251', // Default highlighted SOC occupation
+      countyMetric: 'pop'         // 'pop' | 'growth'
+    };
+
+    // Chapter 1 KPI Cards Data
+    const kpiDataset = {
+      TX: [
+        {
+          title: 'Total Nonfarm Employment',
+          value: '14.46M',
+          delta: '+1.0% YoY (+159.4K)',
+          deltaBadgeClass: 'bg-teal-50 text-teal-700 border-teal-200',
+          benchmark: '3.3x U.S. Growth (+0.3% YoY)',
+          detail: '#1 U.S. state in total net jobs added over past 12 months.'
+        },
+        {
+          title: 'Gross State Product (GSP)',
+          value: '$2.93T',
+          delta: '+4.86% Nominal YoY',
+          deltaBadgeClass: 'bg-teal-50 text-teal-700 border-teal-200',
+          benchmark: '#2 U.S. Economy (~9.3% U.S. GDP)',
+          detail: '$2.38T Real GSP (2017$); 8th largest economy globally.'
+        },
+        {
+          title: 'Typical Home Value (ZHVI)',
+          value: '$294.3K',
+          delta: '-1.4% YoY Affordability Edge',
+          deltaBadgeClass: 'bg-amber-50 text-amber-800 border-amber-200',
+          benchmark: 'vs. $774.6K CA • $366.0K U.S.',
+          detail: '62% below California median, sustaining corporate & talent inflows.'
+        },
+        {
+          title: 'High-AI-Exposure Workforce',
+          value: '34.2%',
+          delta: '~4.95M Jobs in High-Exposure SOCs',
+          deltaBadgeClass: 'bg-coral-50 text-coral-700 border-coral-200',
+          benchmark: 'Info Sector -3.9% YoY Restructuring',
+          detail: 'Share of TX employment in roles with >35% observed AI task coverage.'
+        }
+      ],
+      DFW: [
+        {
+          title: 'DFW Nonfarm Employment',
+          value: '4.35M',
+          delta: '+1.0% YoY (+43.9K)',
+          deltaBadgeClass: 'bg-teal-50 text-teal-700 border-teal-200',
+          benchmark: '30.1% of All Texas Jobs',
+          detail: '#4 largest U.S. metro labor market; 38.4% Bachelor’s+ attainment.'
+        },
+        {
+          title: 'DFW Metro Gross Product',
+          value: '~$780B',
+          delta: '+5.1% Nominal YoY',
+          deltaBadgeClass: 'bg-teal-50 text-teal-700 border-teal-200',
+          benchmark: '~26.6% of Texas State GSP',
+          detail: 'Anchored by 20+ Fortune 500 HQs, "Y’all Street" finance, & aerospace.'
+        },
+        {
+          title: 'DFW Typical Home Value',
+          value: '~$372.0K',
+          delta: '52% Below California ($774.6K)',
+          deltaBadgeClass: 'bg-amber-50 text-amber-800 border-amber-200',
+          benchmark: 'Aligned with U.S. ($366.0K)',
+          detail: 'Stabilizing inventory (~4.2 months) supports North Texas suburban growth.'
+        },
+        {
+          title: 'DFW High-AI-Exposure Share',
+          value: '39.6%',
+          delta: '+5.4 pts Above TX Average',
+          deltaBadgeClass: 'bg-coral-50 text-coral-700 border-coral-200',
+          benchmark: 'Driven by Finance & Corp. HQs',
+          detail: 'Higher concentration of software, finance, and management analysts.'
+        }
+      ]
+    };
+
+    // Chapter 2: 11 Supersectors (Employment in 000s, YoY Growth %, Observed AI Exposure %, Quadrant)
+    const supersectorDataset = [
+      {
+        name: 'Trade, Transp. & Utilities',
+        txJobs: 2808.3, dfwJobs: 892.4,
+        txGrowth: 0.5, dfwGrowth: 0.7,
+        aiExposure: 21.5,
+        quadrant: 'PHYSICAL',
+        takeaway: 'Largest sector; physical warehousing & logistics shield frontline roles while supply-chain planning adopts AI.'
+      },
+      {
+        name: 'Prof. & Business Services',
+        txJobs: 2192.0, dfwJobs: 768.5,
+        txGrowth: 2.0, dfwGrowth: 2.2,
+        aiExposure: 48.2,
+        quadrant: 'TRANSFORM',
+        takeaway: 'High-growth white-collar engine; rapid AI augmentation across consulting, legal, and corporate HQ operations.'
+      },
+      {
+        name: 'Government',
+        txJobs: 2131.8, dfwJobs: 472.1,
+        txGrowth: 0.0, dfwGrowth: 0.4,
+        aiExposure: 26.4,
+        quadrant: 'STABLE',
+        takeaway: 'Public education and municipal services remain steady; administrative workflows gradually digitizing.'
+      },
+      {
+        name: 'Private Ed & Health Services',
+        txJobs: 2003.8, dfwJobs: 534.0,
+        txGrowth: 1.6, dfwGrowth: 1.9,
+        aiExposure: 19.8,
+        quadrant: 'PHYSICAL',
+        takeaway: 'Demographic expansion drives clinical headcount; AI primarily relieves medical coding & triage admin.'
+      },
+      {
+        name: 'Leisure & Hospitality',
+        txJobs: 1555.4, dfwJobs: 448.2,
+        txGrowth: 0.8, dfwGrowth: 1.1,
+        aiExposure: 11.2,
+        quadrant: 'PHYSICAL',
+        takeaway: 'In-person service delivery insulates headcount from GenAI displacement.'
+      },
+      {
+        name: 'Manufacturing',
+        txJobs: 990.6, dfwJobs: 311.4,
+        txGrowth: 1.3, dfwGrowth: 1.5,
+        aiExposure: 23.0,
+        quadrant: 'PHYSICAL',
+        takeaway: '11-year TX job high; aerospace, defense, and semiconductor plants pair physical assembly with AI quality control.'
+      },
+      {
+        name: 'Financial Activities',
+        txJobs: 940.6, dfwJobs: 386.5,
+        txGrowth: -0.1, dfwGrowth: 0.6,
+        aiExposure: 53.6,
+        quadrant: 'TRANSFORM',
+        takeaway: 'DFW ("Y’all Street") grows +0.6% despite TX-wide rate drag (-0.1%); highest institutional GenAI deployment.'
+      },
+      {
+        name: 'Construction',
+        txJobs: 921.6, dfwJobs: 264.8,
+        txGrowth: 2.1, dfwGrowth: 2.4,
+        aiExposure: 6.4,
+        quadrant: 'PHYSICAL',
+        takeaway: 'Fastest percentage job growth (+2.1% TX / +2.4% DFW); powered by data centers, fabs, and infrastructure.'
+      },
+      {
+        name: 'Other Services',
+        txJobs: 491.9, dfwJobs: 146.2,
+        txGrowth: 0.5, dfwGrowth: 0.6,
+        aiExposure: 17.5,
+        quadrant: 'PHYSICAL',
+        takeaway: 'Equipment repair, maintenance, and personal services remain hands-on.'
+      },
+      {
+        name: 'Information (Tech & Media)',
+        txJobs: 212.9, dfwJobs: 88.4,
+        txGrowth: -3.9, dfwGrowth: -3.4,
+        aiExposure: 61.8,
+        quadrant: 'RESTRUCTURE',
+        takeaway: 'Sharpest contraction (-3.9% YoY) as software, telecom, and media firms restructure around GenAI productivity.'
+      },
+      {
+        name: 'Mining & Logging (Oil & Gas)',
+        txJobs: 212.4, dfwJobs: 37.5,
+        txGrowth: -0.5, dfwGrowth: -0.3,
+        aiExposure: 18.9,
+        quadrant: 'STABLE',
+        takeaway: 'Capital discipline keeps extraction payrolls lean while subsurface AI analytics boost output per worker.'
+      }
+    ];
+
+    // Chapter 3: Real 5-Digit SOC Occupations from Anthropic Observed AI Exposure Dataset
+    const socOccupations = [
+      {
+        soc: '15-1251',
+        title: 'Computer Programmers',
+        group: '15-0000',
+        groupName: 'Computer & Mathematical',
+        exposure: 74.5,
+        txEmp: '14,820',
+        dfwEmp: '5,410',
+        dynamic: 'High Automation / Code-Gen Shift',
+        riskLevel: 'High Displacement Risk',
+        strategy: 'Transition legacy syntax-writing programmers into AI-assisted systems integration and code-review governance. World Bank job-posting data confirms sharp contraction in routine junior coding requisitions.',
+        worldBankInsight: 'Entry-level junior developer postings fell ~28% relative to senior architecture roles following LLM code-assistant adoption.'
+      },
+      {
+        soc: '13-1161',
+        title: 'Market Research Analysts & Marketing Specialists',
+        group: '13-0000',
+        groupName: 'Business & Financial Operations',
+        exposure: 64.8,
+        txEmp: '78,450',
+        dfwEmp: '28,900',
+        dynamic: 'Heavy Synthesis & Content Augmentation',
+        riskLevel: 'High Transformation',
+        strategy: 'Automate survey synthesis, competitive scraping, and first-draft campaign copy; upskill DFW corporate marketing teams in proprietary customer data modeling and experimentation.',
+        worldBankInsight: 'GenAI reduces routine junior analyst research hours by 35–45%, shifting hiring toward campaign attribution & brand strategy.'
+      },
+      {
+        soc: '15-1243',
+        title: 'Database Architects',
+        group: '15-0000',
+        groupName: 'Computer & Mathematical',
+        exposure: 57.9,
+        txEmp: '9,140',
+        dfwEmp: '3,680',
+        dynamic: 'AI Data-Pipeline & RAG Enablement',
+        riskLevel: 'Augmentation Tailwind',
+        strategy: 'High strategic value in DFW enterprise HQ relocations: every corporate GenAI deployment requires clean vector/relational architecture, governance, and lineage.',
+        worldBankInsight: 'Demand remains resilient as enterprises modernize data warehouses to support retrieval-augmented generation (RAG).'
+      },
+      {
+        soc: '13-2051',
+        title: 'Financial & Investment Analysts',
+        group: '13-0000',
+        groupName: 'Business & Financial Operations',
+        exposure: 57.2,
+        txEmp: '34,600',
+        dfwEmp: '15,240',
+        dynamic: 'Core "Y’all Street" Augmentation',
+        riskLevel: 'High Transformation',
+        strategy: 'Deploy LLM co-pilots for earnings-call parsing, credit memos, and variance commentary across Dallas/Plano financial centers while preserving human fiduciary judgment.',
+        worldBankInsight: 'World Bank findings show routine financial modeling postings slowing while hybrid AI-quant & risk oversight roles expand.'
+      },
+      {
+        soc: '15-1212',
+        title: 'Information Security Analysts',
+        group: '15-0000',
+        groupName: 'Computer & Mathematical',
+        exposure: 48.6,
+        txEmp: '19,850',
+        dfwEmp: '7,920',
+        dynamic: 'AI Threat Defense & SOC Triage',
+        riskLevel: 'Augmentation Tailwind',
+        strategy: 'Use AI agents to automate Tier-1 alert triage while expanding headcount for AI model security, zero-trust cloud defense, and regulatory compliance.',
+        worldBankInsight: 'Net hiring remains positive despite high task exposure because AI simultaneously expands the enterprise cyber attack surface.'
+      },
+      {
+        soc: '15-2051',
+        title: 'Data Scientists',
+        group: '15-0000',
+        groupName: 'Computer & Mathematical',
+        exposure: 46.1,
+        txEmp: '22,400',
+        dfwEmp: '8,750',
+        dynamic: 'Shift from Classical ML to LLM Ops',
+        riskLevel: 'Augmentation Tailwind',
+        strategy: 'Pivot DFW analytics teams from exploratory notebooks to production LLM evaluation, fine-tuning, and measurable ROI instrumentation.',
+        worldBankInsight: 'Employers increasingly bundle GenAI orchestration skills into standard data science job descriptions.'
+      },
+      {
+        soc: '13-1071',
+        title: 'Human Resources Specialists',
+        group: '13-0000',
+        groupName: 'Business & Financial Operations',
+        exposure: 40.3,
+        txEmp: '84,300',
+        dfwEmp: '29,400',
+        dynamic: 'Screening & Policy Automation',
+        riskLevel: 'Moderate Transformation',
+        strategy: 'Automate resume screening, onboarding FAQs, and job-description drafting; reallocate HR capacity to internal mobility and AI reskilling programs.',
+        worldBankInsight: 'Administrative HR coordinator postings have flattened while organizational change-management demand rises.'
+      },
+      {
+        soc: '11-3031',
+        title: 'Financial Managers',
+        group: '11-0000',
+        groupName: 'Management Occupations',
+        exposure: 39.1,
+        txEmp: '76,900',
+        dfwEmp: '28,150',
+        dynamic: 'Decision-Support Acceleration',
+        riskLevel: 'Low Displacement / High Leverage',
+        strategy: 'Equip treasury and FP&A leaders with real-time AI scenario forecasting; human accountability over capital allocation insulates leadership headcount.',
+        worldBankInsight: 'Senior managerial roles experience task compression rather than headcount reduction.'
+      },
+      {
+        soc: '13-2011',
+        title: 'Accountants & Auditors',
+        group: '13-0000',
+        groupName: 'Business & Financial Operations',
+        exposure: 34.8,
+        txEmp: '148,500',
+        dfwEmp: '52,300',
+        dynamic: 'Audit Sampling & Reconciliation AI',
+        riskLevel: 'Moderate Transformation',
+        strategy: 'Automate invoice matching, tax prep workpapers, and anomaly detection across DFW’s Big Four and corporate accounting hubs.',
+        worldBankInsight: 'Junior audit/bookkeeping tasks face high automation, increasing demand for CPA advisory and complex tax structuring.'
+      },
+      {
+        soc: '15-1252',
+        title: 'Software Developers',
+        group: '15-0000',
+        groupName: 'Computer & Mathematical',
+        exposure: 28.8,
+        txEmp: '142,600',
+        dfwEmp: '56,800',
+        dynamic: 'Full-Stack & Architecture Resilience',
+        riskLevel: 'Augmentation Tailwind',
+        strategy: 'Unlike narrow coders (15-1251 at 74.5%), full-lifecycle Software Developers spend 70%+ of time on system design, stakeholder alignment, and deployment—yielding net productivity gains.',
+        worldBankInsight: 'World Bank highlights a sharp divergence: entry-level coding postings dipped, while mid/senior systems developers remain in high demand.'
+      },
+      {
+        soc: '13-1111',
+        title: 'Management Analysts',
+        group: '13-0000',
+        groupName: 'Business & Financial Operations',
+        exposure: 24.4,
+        txEmp: '89,200',
+        dfwEmp: '33,400',
+        dynamic: 'Process Redesign & AI Change Agents',
+        riskLevel: 'Augmentation Tailwind',
+        strategy: 'Deploy management analysts to map business workflows and embed GenAI tools across Texas healthcare, logistics, and financial enterprises.',
+        worldBankInsight: 'Strong growth in Prof. & Business Services (+2.0% TX / +2.2% DFW) reflects surging enterprise AI transformation consulting.'
+      },
+      {
+        soc: '11-9111',
+        title: 'Medical & Health Services Managers',
+        group: '11-0000',
+        groupName: 'Management Occupations',
+        exposure: 6.6,
+        txEmp: '48,700',
+        dfwEmp: '14,900',
+        dynamic: 'Human-Centric Clinical Operations',
+        riskLevel: 'Low AI Exposure',
+        strategy: 'Rapid Texas population growth (+2.47M) drives sustained hospital and outpatient expansion; AI stays confined to back-office scheduling.',
+        worldBankInsight: 'Healthcare leadership shows virtually zero GenAI displacement pressure.'
+      },
+      {
+        soc: '47-2061',
+        title: 'Construction Laborers',
+        group: '47-0000',
+        groupName: 'Construction & Extraction',
+        exposure: 0.0,
+        txEmp: '138,400',
+        dfwEmp: '39,200',
+        dynamic: 'Zero Observed LLM Task Exposure',
+        riskLevel: 'AI-Insulated Growth Engine',
+        strategy: 'Physical build-out of DFW data centers, semiconductor fabs, and transportation corridors makes skilled trades a primary bottleneck—not an AI casualty.',
+        worldBankInsight: 'Physical-world occupations show 0% LLM task exposure and lead Texas YoY job growth (+2.1%).'
+      }
+    ];
+
+    // Chapter 4: DFW Core 4 Counties + Peer Texas Metro Counties
+    const countyCorridors = [
+      { name: 'Harris (Houston)', pop: 5.09, growth5Yr: 7.6, isDFW: false, tag: 'Peer Metro' },
+      { name: 'Dallas (DFW Core)', pop: 2.66, growth5Yr: 3.8, isDFW: true, tag: 'DFW Core' },
+      { name: 'Tarrant (DFW Core)', pop: 2.27, growth5Yr: 6.9, isDFW: true, tag: 'DFW Core' },
+      { name: 'Bexar (San Antonio)', pop: 2.18, growth5Yr: 8.4, isDFW: false, tag: 'Peer Metro' },
+      { name: 'Travis (Austin)', pop: 1.40, growth5Yr: 8.1, isDFW: false, tag: 'Peer Metro' },
+      { name: 'Collin (DFW Core)', pop: 1.20, growth5Yr: 14.2, isDFW: true, tag: 'DFW Core' },
+      { name: 'Denton (DFW Core)', pop: 1.01, growth5Yr: 12.8, isDFW: true, tag: 'DFW Core' }
+    ];
+
+    // Chart instances
+    let bubbleChart = null;
+    let socChart = null;
+    let countyChart = null;
+
+    // =========================================================================
+    // 2. TOP BAR & NAVIGATION CONTROLLERS
+    // =========================================================================
+    function setRegion(region) {
+      appState.region = region;
+      const btnTx = document.getElementById('btn-region-tx');
+      const btnDfw = document.getElementById('btn-region-dfw');
+
+      if (region === 'TX') {
+        btnTx.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-slate-900 text-white shadow-xs';
+        btnDfw.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+      } else {
+        btnDfw.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-slate-900 text-white shadow-xs';
+        btnTx.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+      }
+
+      updateChapter1Narrative();
+      renderKPICards();
+      renderSectorBubbleChart();
+      filterOccupations();
+    }
+
+    function setViewMode(mode) {
+      appState.viewMode = mode;
+      const btnStory = document.getElementById('btn-view-story');
+      const btnExplorer = document.getElementById('btn-view-explorer');
+      const storySections = document.querySelectorAll('.story-chapter');
+
+      if (mode === 'STORY') {
+        btnStory.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-teal-600 text-white shadow-xs';
+        btnExplorer.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+        storySections.forEach(sec => sec.classList.remove('hidden'));
+        // Re-render charts after un-hiding
+        renderSectorBubbleChart();
+        renderCountyCorridorChart();
+      } else {
+        btnExplorer.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-teal-600 text-white shadow-xs';
+        btnStory.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+        storySections.forEach(sec => sec.classList.add('hidden'));
+        document.getElementById('chapter-3').scrollIntoView({ behavior: 'smooth' });
+      }
+      filterOccupations();
+    }
+
+    function activateChapterLink(el) {
+      if (appState.viewMode === 'EXPLORER') {
+        setViewMode('STORY');
+      }
+      document.querySelectorAll('.nav-chapter-link').forEach(link => link.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    // =========================================================================
+    // 3. CHAPTER 1: BIG PICTURE & KPI CARDS
+    // =========================================================================
+    function updateChapter1Narrative() {
+      const badge = document.getElementById('ch1-region-badge');
+      const headline = document.getElementById('ch1-headline');
+      const narrative = document.getElementById('ch1-narrative');
+
+      if (appState.region === 'TX') {
+        badge.textContent = 'TEXAS STATEWIDE MACRO & AI READINESS';
+        headline.textContent = 'The Big Picture: Texas Outpaces U.S. Job Growth 3-to-1 While Navigating White-Collar AI Restructuring';
+        narrative.innerHTML = 'With <strong class="text-slate-900">14.46 million nonfarm jobs</strong> (+1.0% YoY vs. +0.3% U.S.) and a <strong class="text-slate-900">$2.93 trillion economy</strong>, Texas’s physical infrastructure and corporate relocation engine remains resilient. However, <strong class="text-teal-700">34.2% of Texas’s workforce</strong> sits in high-AI-exposure white-collar and administrative roles—making workforce AI augmentation a central board-level priority.';
+      } else {
+        badge.textContent = 'DALLAS–FORT WORTH–ARLINGTON MSA (CBSA 19100)';
+        headline.textContent = 'DFW Anchors 30.1% of Texas Employment (4.35M Jobs) With Higher White-Collar AI Exposure & Talent Density';
+        narrative.innerHTML = 'Generating <strong class="text-slate-900">~$780 billion in metro GDP</strong> and adding <strong class="text-slate-900">43,900 jobs YoY (+1.0%)</strong>, DFW combines Fortune 500 corporate scale with 38.4% adult bachelor’s attainment. Because <strong class="text-teal-700">39.6% of DFW jobs</strong> sit in high-AI-exposure finance, tech, and corporate roles, North Texas is ground zero for enterprise GenAI adoption.';
+      }
+    }
+
+    function renderKPICards() {
+      const grid = document.getElementById('ch1-kpi-grid');
+      const cards = kpiDataset[appState.region];
+
+      grid.innerHTML = cards.map(c => `
+        <div class="intel-card rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">${c.title}</div>
+            <div class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">${c.value}</div>
+            <div class="mt-2">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold border ${c.deltaBadgeClass}">
+                ${c.delta}
+              </span>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 space-y-1">
+            <div class="text-xs font-bold text-slate-700">${c.benchmark}</div>
+            <p class="text-[11px] text-slate-500 leading-snug">${c.detail}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 4. CHAPTER 2: SECTOR MOMENTUM MATRIX (BUBBLE QUADRANT CHART)
+    // =========================================================================
+    function setQuadrantFilter(qFilter) {
+      appState.quadrantFilter = qFilter;
+      document.querySelectorAll('.q-filter-btn').forEach(btn => {
+        const isSelected = btn.dataset.qfilter === qFilter;
+        btn.style.opacity = isSelected ? '1' : '0.65';
+        btn.style.transform = isSelected ? 'scale(1.02)' : 'scale(1)';
+      });
+      renderSectorBubbleChart();
+    }
+
+    // Custom Chart.js Plugin to draw Quadrant Crosshairs & Labels
+    const quadrantBackgroundPlugin = {
+      id: 'quadrantBackground',
+      beforeDraw(chart) {
+        const { ctx, chartArea: { left, top, right, bottom }, scales: { x, y } } = chart;
+        if (!x || !y) return;
+
+        const midX = x.getPixelForValue(35); // 35% AI Exposure threshold
+        const midY = y.getPixelForValue(0.8); // 0.8% YoY growth threshold
+
+        ctx.save();
+        // Subtle quadrant tints
+        ctx.fillStyle = 'rgba(13, 148, 136, 0.04)'; // Top-Right (Teal)
+        ctx.fillRect(midX, top, right - midX, midY - top);
+
+        ctx.fillStyle = 'rgba(217, 119, 6, 0.04)'; // Top-Left (Amber)
+        ctx.fillRect(left, top, midX - left, midY - top);
+
+        ctx.fillStyle = 'rgba(225, 29, 72, 0.04)'; // Bottom-Right (Coral)
+        ctx.fillRect(midX, midY, right - midX, bottom - midY);
+
+        // Dashed crosshair lines
+        ctx.strokeStyle = '#CBD5E1';
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([5, 5]);
+
+        ctx.beginPath();
+        ctx.moveTo(midX, top);
+        ctx.lineTo(midX, bottom);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(left, midY);
+        ctx.lineTo(right, midY);
+        ctx.stroke();
+        ctx.restore();
+      }
+    };
+
+    function renderSectorBubbleChart() {
+      const canvas = document.getElementById('sectorBubbleChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const isTX = appState.region === 'TX';
+
+      document.getElementById('ch2-title').textContent = isTX
+        ? 'Sector Momentum Matrix (Texas Statewide): Scale, 12-Month Growth & AI Task Exposure'
+        : 'Sector Momentum Matrix (DFW Metro): Scale, 12-Month Growth & AI Task Exposure';
+
+      const filtered = supersectorDataset.filter(s => {
+        if (appState.quadrantFilter === 'ALL') return true;
+        return s.quadrant === appState.quadrantFilter;
+      });
+
+      const colorMap = {
+        TRANSFORM: { bg: 'rgba(13, 148, 136, 0.82)', border: '#0F766E' },
+        PHYSICAL: { bg: 'rgba(217, 119, 6, 0.82)', border: '#B45309' },
+        STABLE: { bg: 'rgba(71, 85, 105, 0.78)', border: '#334155' },
+        RESTRUCTURE: { bg: 'rgba(225, 29, 72, 0.85)', border: '#BE123C' }
+      };
+
+      const bubblePoints = filtered.map(s => {
+        const emp = isTX ? s.txJobs : s.dfwJobs;
+        const growth = isTX ? s.txGrowth : s.dfwGrowth;
+        // Scale radius cleanly across TX (212k–2808k) and DFW (37k–892k)
+        const radius = isTX
+          ? Math.max(9, Math.sqrt(emp) * 0.62)
+          : Math.max(9, Math.sqrt(emp) * 1.05);
+
+        return {
+          x: s.aiExposure,
+          y: growth,
+          r: radius,
+          sector: s,
+          empVal: emp
+        };
+      });
+
+      if (bubbleChart) {
+        bubbleChart.destroy();
+      }
+
+      bubbleChart = new Chart(ctx, {
+        type: 'bubble',
+        plugins: [quadrantBackgroundPlugin],
+        data: {
+          datasets: [{
+            label: isTX ? 'Texas Supersectors' : 'DFW Supersectors',
+            data: bubblePoints,
+            backgroundColor: bubblePoints.map(p => colorMap[p.sector.quadrant].bg),
+            borderColor: bubblePoints.map(p => colorMap[p.sector.quadrant].border),
+            borderWidth: 2,
+            hoverRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0F172A',
+              titleFont: { family: 'Plus Jakarta Sans', size: 13, weight: '700' },
+              bodyFont: { family: 'Inter', size: 12 },
+              padding: 12,
+              cornerRadius: 10,
+              callbacks: {
+                title: items => items[0].raw.sector.name,
+                label: item => {
+                  const raw = item.raw;
+                  const gStr = (raw.y > 0 ? '+' : '') + raw.y.toFixed(1) + '%';
+                  return [
+                    `Employment: ${raw.empVal.toLocaleString()}k jobs`,
+                    `12-Mo Job Growth: ${gStr} YoY`,
+                    `Observed AI Exposure: ${raw.x.toFixed(1)}%`
+                  ];
+                },
+                afterLabel: item => {
+                  const text = item.raw.sector.takeaway;
+                  const words = text.split(' ');
+                  const lines = [''];
+                  words.forEach(w => {
+                    if ((lines[lines.length - 1] + ' ' + w).length > 52) lines.push(w);
+                    else lines[lines.length - 1] = (lines[lines.length - 1] + ' ' + w).trim();
+                  });
+                  return ['\nStrategic Insight:', ...lines];
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              min: 0,
+              max: 72,
+              title: {
+                display: true,
+                text: 'Observed AI Task Exposure (%) — Anthropic / O*NET Index',
+                font: { family: 'Inter', size: 11, weight: '700' },
+                color: '#334155'
+              },
+              grid: { color: '#F1F5F9' },
+              ticks: { callback: v => v + '%', font: { size: 11 } }
+            },
+            y: {
+              min: -4.8,
+              max: 3.2,
+              title: {
+                display: true,
+                text: '12-Month Nonfarm Job Growth (% YoY)',
+                font: { family: 'Inter', size: 11, weight: '700' },
+                color: '#334155'
+              },
+              grid: { color: '#F1F5F9' },
+              ticks: {
+                callback: v => (v > 0 ? '+' : '') + v.toFixed(1) + '%',
+                font: { size: 11 }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 5. CHAPTER 3: SOC OCCUPATION AI EXPOSURE EXPLORER
+    // =========================================================================
+    function filterOccupations() {
+      const groupFilter = document.getElementById('soc-group-filter').value;
+      const query = document.getElementById('soc-search-input').value.trim().toLowerCase();
+
+      const filtered = socOccupations.filter(occ => {
+        const matchesGroup = groupFilter === 'ALL' || occ.group === groupFilter;
+        const matchesQuery = !query ||
+          occ.soc.toLowerCase().includes(query) ||
+          occ.title.toLowerCase().includes(query) ||
+          occ.dynamic.toLowerCase().includes(query);
+        return matchesGroup && matchesQuery;
+      });
+
+      // Keep selected SOC valid within filtered list if possible
+      if (filtered.length > 0 && !filtered.some(o => o.soc === appState.selectedSocCode)) {
+        appState.selectedSocCode = filtered[0].soc;
+      }
+
+      renderSocBarChart(filtered);
+      renderSocTable(filtered);
+      renderSocDetailCard();
+    }
+
+    function selectSocOccupation(socCode) {
+      appState.selectedSocCode = socCode;
+      filterOccupations();
+    }
+
+    function getExposureBadge(exposure) {
+      if (exposure >= 50) return 'bg-coral-50 text-coral-700 border-coral-200';
+      if (exposure >= 30) return 'bg-amber-50 text-amber-800 border-amber-200';
+      return 'bg-teal-50 text-teal-700 border-teal-200';
+    }
+
+    function renderSocBarChart(list) {
+      const canvas = document.getElementById('socBarChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      if (socChart) {
+        socChart.destroy();
+      }
+
+      socChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: list.map(o => `${o.soc} ${o.title.length > 26 ? o.title.slice(0, 25) + '…' : o.title}`),
+          datasets: [{
+            label: 'Observed AI Exposure (%)',
+            data: list.map(o => o.exposure),
+            backgroundColor: list.map(o => {
+              if (o.soc === appState.selectedSocCode) return '#0F172A';
+              if (o.exposure >= 50) return '#E11D48';
+              if (o.exposure >= 30) return '#D97706';
+              return '#0D9488';
+            }),
+            borderRadius: 5
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          onClick: (_, elements) => {
+            if (elements && elements.length > 0) {
+              const idx = elements[0].index;
+              selectSocOccupation(list[idx].soc);
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0F172A',
+              callbacks: {
+                title: items => {
+                  const occ = list[items[0].dataIndex];
+                  return `${occ.soc} — ${occ.title}`;
+                },
+                label: item => `Observed AI Task Exposure: ${item.parsed.x}%`
+              }
+            }
+          },
+          scales: {
+            x: {
+              min: 0,
+              max: 85,
+              grid: { color: '#E2E8F0' },
+              ticks: { callback: v => v + '%', font: { size: 11 } }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { family: 'Inter', size: 11, weight: '600' }, color: '#1E293B' }
+            }
+          }
+        }
+      });
+    }
+
+    function renderSocDetailCard() {
+      const container = document.getElementById('soc-detail-card');
+      const occ = socOccupations.find(o => o.soc === appState.selectedSocCode) || socOccupations[0];
+      const isTX = appState.region === 'TX';
+
+      container.innerHTML = `
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-md bg-slate-900 text-white text-[11px] font-bold">
+              SOC ${occ.soc}
+            </span>
+            <span class="text-[11px] font-semibold text-slate-500 ml-1.5">${occ.groupName}</span>
+            <h3 class="font-display text-lg font-extrabold text-slate-900 mt-1.5 leading-snug">${occ.title}</h3>
+          </div>
+          <div class="text-right shrink-0">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">AI Exposure</div>
+            <div class="font-display text-2xl font-extrabold ${occ.exposure >= 50 ? 'text-coral-600' : occ.exposure >= 30 ? 'text-amber-600' : 'text-teal-600'}">
+              ${occ.exposure.toFixed(1)}%
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5 my-4 p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
+          <div>
+            <span class="text-slate-400 block text-[11px]">${isTX ? 'Texas Employment' : 'DFW Employment'}</span>
+            <span class="font-extrabold text-slate-900 text-sm">${isTX ? occ.txEmp : occ.dfwEmp} jobs</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[11px]">Workforce Trajectory</span>
+            <span class="font-bold text-slate-800">${occ.riskLevel}</span>
+          </div>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <div>
+            <div class="font-bold uppercase tracking-wider text-teal-700 text-[11px] mb-1">
+              Executive Talent Strategy (Augmentation vs. Displacement)
+            </div>
+            <p class="text-slate-700 leading-relaxed">${occ.strategy}</p>
+          </div>
+
+          <div class="p-3 rounded-xl bg-amber-50/80 border border-amber-200/80">
+            <div class="font-bold text-amber-900 text-[11px] uppercase tracking-wider mb-0.5">
+              World Bank GenAI Labor Demand Signal
+            </div>
+            <p class="text-slate-700 leading-relaxed">${occ.worldBankInsight}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSocTable(list) {
+      const tbody = document.getElementById('soc-table-body');
+      const colHeader = document.getElementById('tbl-col-emp');
+      const isTX = appState.region === 'TX';
+      colHeader.textContent = isTX ? 'TX Employment' : 'DFW Employment';
+
+      if (list.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-8 text-center text-slate-500 font-medium">
+              No matching SOC occupations found. Clear your search filter to view all 13 benchmark roles.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = list.map(o => {
+        const isSelected = o.soc === appState.selectedSocCode;
+        const rowClass = isSelected
+          ? 'bg-teal-50/70 font-semibold cursor-pointer'
+          : 'hover:bg-slate-50 cursor-pointer transition-colors';
+
+        return `
+          <tr onclick="selectSocOccupation('${o.soc}')" class="${rowClass}">
+            <td class="py-3 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">${o.soc}</td>
+            <td class="py-3 px-4 font-bold text-slate-900">${o.title}</td>
+            <td class="py-3 px-4 text-slate-500 whitespace-nowrap">${o.groupName}</td>
+            <td class="py-3 px-4 text-right whitespace-nowrap">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-extrabold border ${getExposureBadge(o.exposure)}">
+                ${o.exposure.toFixed(1)}%
+              </span>
+            </td>
+            <td class="py-3 px-4 text-right font-semibold text-slate-700 whitespace-nowrap">
+              ${isTX ? o.txEmp : o.dfwEmp}
+            </td>
+            <td class="py-3 px-4 text-slate-600 whitespace-nowrap">${o.dynamic}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 6. CHAPTER 4: DFW SUB-REGIONAL COUNTY CORRIDORS CHART
+    // =========================================================================
+    function setCountyMetric(metric) {
+      appState.countyMetric = metric;
+      const btnPop = document.getElementById('btn-county-pop');
+      const btnGrowth = document.getElementById('btn-county-growth');
+
+      if (metric === 'pop') {
+        btnPop.className = 'px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-900 text-white transition-all';
+        btnGrowth.className = 'px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition-all';
+      } else {
+        btnGrowth.className = 'px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-900 text-white transition-all';
+        btnPop.className = 'px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition-all';
+      }
+      renderCountyCorridorChart();
+    }
+
+    function renderCountyCorridorChart() {
+      const canvas = document.getElementById('countyCorridorChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const isPop = appState.countyMetric === 'pop';
+
+      const sorted = [...countyCorridors].sort((a, b) => isPop ? b.pop - a.pop : b.growth5Yr - a.growth5Yr);
+
+      if (countyChart) {
+        countyChart.destroy();
+      }
+
+      countyChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: sorted.map(c => c.name),
+          datasets: [{
+            label: isPop ? '2026 Population (Millions)' : '5-Year Population Growth (%)',
+            data: sorted.map(c => isPop ? c.pop : c.growth5Yr),
+            backgroundColor: sorted.map(c => c.isDFW ? '#0D9488' : '#0F172A'),
+            borderRadius: 6
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0F172A',
+              callbacks: {
+                label: item => {
+                  const c = sorted[item.dataIndex];
+                  return isPop
+                    ? `Population: ${c.pop.toFixed(2)}M (${c.tag})`
+                    : `5-Yr Growth: +${c.growth5Yr.toFixed(1)}% (${c.tag})`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              grid: { color: '#F1F5F9' },
+              ticks: {
+                callback: v => isPop ? v.toFixed(1) + 'M' : '+' + v + '%',
+                font: { size: 11 }
+              }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { family: 'Inter', size: 11, weight: '700' }, color: '#1E293B' }
+            }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 7. CSV SUMMARY EXPORT
+    // =========================================================================
+    function downloadCSVSummary() {
+      const rows = [
+        ['Section', 'Code_or_Category', 'Name', 'Texas_Metric', 'DFW_Metric', 'AI_Exposure_or_Growth'],
+        ...supersectorDataset.map(s => [
+          'Supersector',
+          s.quadrant,
+          `"${s.name}"`,
+          `${s.txJobs}k jobs (${s.txGrowth > 0 ? '+' : ''}${s.txGrowth}% YoY)`,
+          `${s.dfwJobs}k jobs (${s.dfwGrowth > 0 ? '+' : ''}${s.dfwGrowth}% YoY)`,
+          `${s.aiExposure}% Observed AI Exposure`
+        ]),
+        ...socOccupations.map(o => [
+          'SOC_Occupation',
+          o.soc,
+          `"${o.title}"`,
+          `"${o.txEmp} jobs"`,
+          `"${o.dfwEmp} jobs"`,
+          `${o.exposure}% Observed AI Exposure`
+        ])
+      ];
+
+      const csvContent = rows.map(r => r.join(',')).join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Texas_DFW_Workforce_AI_Intelligence_2026_${appState.region}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    // =========================================================================
+    // 8. INITIALIZATION
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      renderKPICards();
+      renderSectorBubbleChart();
+      filterOccupations();
+      renderCountyCorridorChart();
+    });
+  </script>
+</body>
+</html>

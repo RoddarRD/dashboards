@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Texas & Dallas-Fort Worth (DFW) Economic Outlook 2026</title>
+  <!-- Google Fonts: Inter & Merriweather for editorial executive polish -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['Merriweather', 'Georgia', 'serif'],
+          },
+          colors: {
+            navy: {
+              950: '#080E1E',
+              900: '#0F172A',
+              800: '#1E293B',
+              700: '#334155',
+            },
+            gold: {
+              500: '#D97706',
+              600: '#B45309',
+              100: '#FEF3C7',
+            },
+            emerald: {
+              600: '#059669',
+              100: '#D1FAE5',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Editorial print & smooth transition enhancements */
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+      -webkit-font-smoothing: antialiased;
+    }
+    .editorial-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.02);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .editorial-card:hover {
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    }
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 360px;
+    }
+    @media (max-width: 640px) {
+      .chart-container {
+        height: 300px;
+      }
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: #FFFFFF !important;
+      }
+      .editorial-card {
+        box-shadow: none !important;
+        border: 1px solid #CBD5E1 !important;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body class="font-sans text-slate-800 selection:bg-amber-100 selection:text-navy-900">
+
+  <!-- TOP EXECUTIVE HEADER & INTERACTIVE CONTROLS -->
+  <header class="bg-navy-900 text-white border-b border-slate-800 sticky top-0 z-40 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <!-- Title & Editorial Subtitle -->
+        <div>
+          <div class="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-widest text-amber-400 mb-1">
+            <span>Executive Economic Brief</span>
+            <span class="text-slate-500">•</span>
+            <span>Q4 2026 Edition</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">
+            Texas &amp; Dallas–Fort Worth (DFW) Economic Outlook 2026
+          </h1>
+        </div>
+
+        <!-- Interactive Scope & Benchmark Controls -->
+        <div class="flex flex-wrap items-center gap-3 no-print">
+          <!-- Scope Segmented Control -->
+          <div class="inline-flex rounded-xl bg-slate-800/90 p-1 border border-slate-700" role="group" aria-label="Geographic Scope">
+            <button id="btn-scope-tx" onclick="setScope('TX')"
+              class="px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all bg-white text-navy-900 shadow-sm">
+              Texas Statewide
+            </button>
+            <button id="btn-scope-dfw" onclick="setScope('DFW')"
+              class="px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-300 hover:text-white">
+              Dallas–Fort Worth (DFW)
+            </button>
+          </div>
+
+          <!-- Compare vs California & US Toggle -->
+          <button id="btn-compare" onclick="toggleCompare()"
+            class="inline-flex items-center gap-2 px-3.5 py-2.5 text-xs sm:text-sm font-semibold rounded-xl border border-amber-500/50 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 transition-all">
+            <span id="compare-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+            <span>Compare vs. CA &amp; U.S.</span>
+          </button>
+
+          <!-- Print / Export Brief Button -->
+          <button onclick="window.print()"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2.5 text-xs sm:text-sm font-semibold rounded-xl bg-slate-700 hover:bg-slate-600 text-white border border-slate-600 transition-all"
+            title="Print or Save as PDF Executive Brief">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            <span class="hidden sm:inline">Export Brief</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
+
+    <!-- SECTION 1: NARRATIVE EXECUTIVE THESIS BANNER -->
+    <section class="editorial-card rounded-2xl overflow-hidden border-l-4 border-l-amber-600">
+      <div class="p-6 sm:p-8 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div class="space-y-3 max-w-4xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-semibold tracking-wide uppercase">
+              <span id="thesis-badge">Executive Thesis • Texas Macroeconomic Leadership</span>
+            </div>
+            <h2 id="thesis-headline" class="font-serif text-xl sm:text-2xl lg:text-[26px] font-bold leading-snug text-white">
+              America’s #2 Economy ($2.93T GSP) Outpaces National Job Growth 3-to-1, Powered by Corporate Relocations and a 62% Housing Cost Advantage Over California.
+            </h2>
+            <p id="thesis-body" class="text-sm sm:text-base text-slate-300 leading-relaxed">
+              Texas added <strong class="text-white">159,400 nonfarm jobs YoY (#1 in the U.S.)</strong> and now hosts <strong class="text-white">57 Fortune 500 headquarters</strong>. With a typical home price of <strong class="text-emerald-400">$294,311</strong>—less than two-fifths of California’s $774,582 median and 20% below the U.S. benchmark ($366,019)—Texas sustains inward migration while the <strong class="text-amber-300">Dallas–Fort Worth metro (4.35M jobs)</strong> anchors ~30% of total state employment.
+            </p>
+          </div>
+
+          <!-- Quick Comparative Callout Pill Box -->
+          <div class="shrink-0 bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 min-w-[240px] space-y-3">
+            <div class="text-xs font-semibold uppercase tracking-wider text-slate-400">Key Structural Edge</div>
+            <div class="flex items-baseline justify-between border-b border-white/10 pb-2">
+              <span class="text-xs text-slate-300">TX vs. CA Home Price</span>
+              <span class="text-sm font-bold text-emerald-400">-$480,271 (-62%)</span>
+            </div>
+            <div class="flex items-baseline justify-between border-b border-white/10 pb-2">
+              <span class="text-xs text-slate-300">TX vs. U.S. Job Growth</span>
+              <span class="text-sm font-bold text-amber-400">1.0% vs. 0.3% YoY</span>
+            </div>
+            <div class="flex items-baseline justify-between">
+              <span class="text-xs text-slate-300">DFW Share of TX Jobs</span>
+              <span class="text-sm font-bold text-white">30.1% (4.35M)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional Expandable Comparison Strip (Toggled via "Compare vs. CA & U.S.") -->
+      <div id="comparison-banner" class="bg-amber-50/90 border-t border-amber-200 px-6 py-4 transition-all">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-900">
+            <svg class="w-4 h-4 text-amber-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span>Cross-Region Benchmark Snapshot (Texas vs. DFW vs. California vs. U.S.)</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div class="bg-white px-3 py-2 rounded-lg border border-amber-200/80">
+              <span class="text-slate-500 block">YoY Job Growth</span>
+              <span class="font-bold text-navy-900">TX 1.0% | DFW 1.0%</span>
+              <span class="text-slate-500 block text-[11px]">CA 0.8% • U.S. 0.3%</span>
+            </div>
+            <div class="bg-white px-3 py-2 rounded-lg border border-amber-200/80">
+              <span class="text-slate-500 block">5-Yr Pop Growth</span>
+              <span class="font-bold text-emerald-700">TX +8.8% | DFW +9.6%</span>
+              <span class="text-slate-500 block text-[11px]">CA +0.3% • U.S. +3.1%</span>
+            </div>
+            <div class="bg-white px-3 py-2 rounded-lg border border-amber-200/80">
+              <span class="text-slate-500 block">Typical Home Value</span>
+              <span class="font-bold text-navy-900">TX $294K | DFW $368K</span>
+              <span class="text-slate-500 block text-[11px]">CA $775K • U.S. $366K</span>
+            </div>
+            <div class="bg-white px-3 py-2 rounded-lg border border-amber-200/80">
+              <span class="text-slate-500 block">Bachelor's Degree+</span>
+              <span class="font-bold text-amber-700">TX 35.5% | DFW 38.4%</span>
+              <span class="text-slate-500 block text-[11px]">CA 37.1% • U.S. 36.5%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: HEADLINE KPI CARDS (6 CARDS DYNAMICALLY UPDATED BY SCOPE) -->
+    <section aria-label="Headline Key Performance Indicators">
+      <div class="flex items-center justify-between mb-3">
+        <h3 id="kpi-section-title" class="text-sm font-bold uppercase tracking-wider text-slate-500">
+          Texas Statewide Macroeconomic Scorecard (2026)
+        </h3>
+        <span class="text-xs text-slate-400">Sources: BEA, BLS, Census PEP, Zillow ZHVI</span>
+      </div>
+      <div id="kpi-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        <!-- Populated dynamically via JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 3: CHART A — SECTOR EMPLOYMENT & YOY GROWTH DIVERGING/COMBO CHART -->
+    <section class="editorial-card rounded-2xl p-6 sm:p-7">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-sm bg-navy-900"></span>
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Industry Structure &amp; Momentum</span>
+          </div>
+          <h3 id="sector-chart-title" class="text-lg sm:text-xl font-bold text-navy-900 mt-1">
+            Texas Nonfarm Employment &amp; YoY Growth Across All 11 Supersectors
+          </h3>
+          <p id="sector-chart-subtitle" class="text-xs sm:text-sm text-slate-500 mt-0.5">
+            Construction (+2.1%) and Professional &amp; Business Services (+2.0%) lead expansion, while Information (-3.9%) undergoes AI/tech restructuring.
+          </p>
+        </div>
+
+        <!-- Interactive Sort Controls -->
+        <div class="flex items-center gap-2 self-start md:self-center no-print">
+          <span class="text-xs font-medium text-slate-500">Sort by:</span>
+          <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200">
+            <button id="sort-jobs" onclick="setSectorSort('jobs')"
+              class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-navy-900 text-white shadow-sm transition-all">
+              Total Headcount (000s)
+            </button>
+            <button id="sort-growth" onclick="setSectorSort('growth')"
+              class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-navy-900 transition-all">
+              YoY Growth (%)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart A Canvas -->
+      <div class="mt-5" style="position: relative; width: 100%; height: 420px;">
+        <canvas id="sectorChart"></canvas>
+      </div>
+
+      <!-- Editorial Takeaway Footer inside Card -->
+      <div class="mt-5 pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-600">
+        <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200/60">
+          <span class="font-bold text-navy-900 block mb-1">1. Scale Anchors (Top 4 Supersectors)</span>
+          Trade/Transportation/Utilities (2.81M), Prof. &amp; Business Services (2.19M), Government (2.13M), and Private Ed &amp; Health (2.00M) represent <strong>63.2%</strong> of all Texas jobs.
+        </div>
+        <div class="bg-emerald-50/70 rounded-xl p-3.5 border border-emerald-200/60">
+          <span class="font-bold text-emerald-900 block mb-1">2. Industrial &amp; Build-Out Surge</span>
+          Construction (+2.1%) and Manufacturing (+1.3%, 990.6k jobs—an 11-year high) reflect semiconductor, aerospace, data center, and logistics capex.
+        </div>
+        <div class="bg-amber-50/70 rounded-xl p-3.5 border border-amber-200/60">
+          <span class="font-bold text-amber-900 block mb-1">3. White-Collar &amp; Energy Divergence</span>
+          Information contracted -3.9% amid tech consolidation, while Mining &amp; Logging (-0.5%) holds high output per worker despite disciplined rig headcount.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: TWO-COLUMN BENCHMARKING & COUNTY ENGINE (CHARTS B & C) -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- CHART B: REGIONAL & PEER BENCHMARK COMPARISON (6 cols) -->
+      <div class="lg:col-span-6 editorial-card rounded-2xl p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Competitive Positioning</span>
+              <h3 class="text-lg font-bold text-navy-900 mt-0.5">Peer Benchmark: TX &amp; DFW vs. CA &amp; U.S.</h3>
+            </div>
+            <!-- Metric Selector for Chart B -->
+            <select id="benchmark-metric" onchange="updateBenchmarkChart()"
+              class="no-print text-xs font-semibold bg-slate-100 border border-slate-200 text-navy-900 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500">
+              <option value="rates">Growth &amp; Attainment Rates (%)</option>
+              <option value="housing">Median Home Price ($ USD)</option>
+            </select>
+          </div>
+          <p id="benchmark-caption" class="text-xs text-slate-500 mt-3">
+            Comparing YoY job growth, 5-year population expansion (2020–2025), and adult bachelor's degree attainment.
+          </p>
+          <div class="chart-container mt-4">
+            <canvas id="benchmarkChart"></canvas>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <span>Note: DFW Bachelor's+ attainment (38.4%) exceeds both TX (35.5%) and U.S. (36.5%).</span>
+        </div>
+      </div>
+
+      <!-- CHART C: TOP 10 TEXAS COUNTIES & NORTH TEXAS CORE ENGINE (6 cols) -->
+      <div class="lg:col-span-6 editorial-card rounded-2xl p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Sub-Regional Demographic Engine</span>
+              <h3 class="text-lg font-bold text-navy-900 mt-0.5">Top 10 Texas Counties by Population (2026)</h3>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              DFW Core 4 = 7.14M
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-3">
+            Four of Texas's seven largest counties sit in North Texas (<strong class="text-navy-900">Dallas, Tarrant, Collin, Denton</strong>), highlighted in gold/navy.
+          </p>
+          <div class="chart-container mt-4">
+            <canvas id="countyChart"></canvas>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+          <span>Top 10 counties account for ~65% of Texas's 31.7M total population.</span>
+          <span class="font-semibold text-navy-900">Fastest Suburban Growth: Collin &amp; Denton</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: STRUCTURAL DRIVERS SCORECARD (IBISWORLD-STYLE IMPACT RATINGS) -->
+    <section class="editorial-card rounded-2xl p-6 sm:p-7">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Qualitative &amp; Structural Assessment</span>
+          <h3 class="text-lg sm:text-xl font-bold text-navy-900 mt-0.5">
+            Key Economic Drivers &amp; Risk Scorecard
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+            IBISWorld-style directional impact ratings evaluating structural tailwinds and macro constraints shaping 2026–2027 performance.
+          </p>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="flex flex-wrap items-center gap-2 no-print">
+          <button onclick="filterDrivers('ALL')" data-filter="ALL"
+            class="driver-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-navy-900 text-white transition-all">
+            All Drivers (6)
+          </button>
+          <button onclick="filterDrivers('POSITIVE')" data-filter="POSITIVE"
+            class="driver-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-emerald-50 hover:text-emerald-800 transition-all">
+            Tailwinds (4)
+          </button>
+          <button onclick="filterDrivers('NEGATIVE')" data-filter="NEGATIVE"
+            class="driver-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-amber-50 hover:text-amber-800 transition-all">
+            Constraints (2)
+          </button>
+        </div>
+      </div>
+
+      <div id="drivers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mt-6">
+        <!-- Populated dynamically via JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 6: METHODOLOGY & OPEN DATA SOURCES FOOTER -->
+    <footer class="bg-navy-900 text-slate-300 rounded-2xl p-6 sm:p-8 border border-slate-800">
+      <div class="flex flex-col lg:flex-row justify-between gap-6 pb-6 border-b border-slate-800">
+        <div class="max-w-2xl space-y-2">
+          <div class="text-xs font-bold uppercase tracking-widest text-amber-400">Methodology &amp; Open Public Data Architecture</div>
+          <h4 class="text-base sm:text-lg font-bold text-white">Reproducible Zero-Cost Economic Intelligence Framework</h4>
+          <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+            Designed to replicate institutional economic briefs (IBISWorld / McKinsey / Dallas Fed) using authoritative, publicly accessible federal and state datasets for Texas Statewide and the 11-county Dallas–Fort Worth–Arlington MSA (CBSA 19100).
+          </p>
+        </div>
+        <div class="flex items-start lg:items-center no-print">
+          <button onclick="window.print()"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs sm:text-sm font-semibold shadow-sm transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>Print / Save Executive Brief (PDF)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-6 text-xs text-slate-400">
+        <div>
+          <span class="font-semibold text-white block mb-1">Output &amp; Industry Accounts</span>
+          U.S. Bureau of Economic Analysis (BEA) — <em>SAGDP</em> (State GDP) &amp; <em>CAGDP2</em> (MSA/County GDP by 2-digit NAICS).
+        </div>
+        <div>
+          <span class="font-semibold text-white block mb-1">Employment, Wages &amp; Business Cycles</span>
+          U.S. Bureau of Labor Statistics (BLS) — <em>CES, LAUS, &amp; QCEW</em>; Federal Reserve Bank of Dallas (<em>Texas &amp; DFW Economic Indicators</em>).
+        </div>
+        <div>
+          <span class="font-semibold text-white block mb-1">Demographics, Housing &amp; Tax Climate</span>
+          U.S. Census Bureau (<em>PEP &amp; 2025 ACS 1-Yr</em>), Zillow Research (<em>ZHVI</em>), and Tax Foundation (<em>2027 State Tax Competitiveness Index</em>).
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- JAVASCRIPT DATA & INTERACTIVE VISUALIZATION ENGINE -->
+  <script>
+    // =========================================================================
+    // 1. STATE & DATA REPOSITORY
+    // =========================================================================
+    const state = {
+      scope: 'TX',          // 'TX' | 'DFW'
+      showCompare: true,    // boolean for CA & US comparison strip
+      sectorSort: 'jobs',   // 'jobs' | 'growth'
+      driverFilter: 'ALL'   // 'ALL' | 'POSITIVE' | 'NEGATIVE'
+    };
+
+    const kpiData = {
+      TX: [
+        {
+          label: 'Gross State Product (GSP)',
+          value: '$2.93T',
+          subValue: '$2.38T Real (2017$)',
+          delta: '+4.86% Nominal YoY',
+          deltaType: 'positive',
+          badge: '#2 U.S. Economy (~9.3% of GDP)',
+          spark: [2.35, 2.51, 2.66, 2.79, 2.93]
+        },
+        {
+          label: 'Total Nonfarm Jobs',
+          value: '14.46M',
+          subValue: '+159,400 Jobs Added YoY',
+          delta: '+1.0% YoY (3x U.S. Pace)',
+          deltaType: 'positive',
+          badge: '#1 U.S. Jobs Added',
+          spark: [13.1, 13.6, 13.98, 14.30, 14.46]
+        },
+        {
+          label: 'State Population',
+          value: '31.7M',
+          subValue: '+2.47M Added (2020–2025)',
+          delta: '+8.8% vs. +3.1% U.S.',
+          deltaType: 'positive',
+          badge: '#2 Most Populous State',
+          spark: [29.2, 29.7, 30.3, 31.0, 31.7]
+        },
+        {
+          label: 'Unemployment Rate',
+          value: '4.4%',
+          subValue: 'Down from 4.5% Mid-2026',
+          delta: 'Near Full Employment',
+          deltaType: 'neutral',
+          badge: 'U.S. Rate: 4.2%',
+          spark: [5.4, 4.0, 3.9, 4.2, 4.4]
+        },
+        {
+          label: 'Typical Home Value (ZHVI)',
+          value: '$294,311',
+          subValue: 'CA: $774,582 • U.S.: $366,019',
+          delta: '-1.4% YoY (Affordability Edge)',
+          deltaType: 'positive',
+          badge: '62% Below California',
+          spark: [265, 304, 301, 298, 294]
+        },
+        {
+          label: 'Business Tax Climate',
+          value: '#5 Overall',
+          subValue: '0.0% Corporate & Personal Income Tax',
+          delta: '57 Fortune 500 HQs (#1 U.S.)',
+          deltaType: 'positive',
+          badge: 'Top HQ Destination',
+          spark: [45, 48, 52, 55, 57]
+        }
+      ],
+      DFW: [
+        {
+          label: 'DFW Total Nonfarm Jobs',
+          value: '4.35M',
+          subValue: '+43,900 Jobs Added YoY',
+          delta: '+1.0% YoY Expansion',
+          deltaType: 'positive',
+          badge: '#4 Largest U.S. Metro Labor Market',
+          spark: [3.92, 4.09, 4.21, 4.30, 4.35]
+        },
+        {
+          label: 'DFW Share of Texas Jobs',
+          value: '30.1%',
+          subValue: 'Nearly 1 in 3 Texas Workers',
+          delta: 'Primary State Growth Engine',
+          deltaType: 'positive',
+          badge: 'Anchors North Texas GDP',
+          spark: [29.4, 29.6, 29.8, 30.0, 30.1]
+        },
+        {
+          label: 'Core 4-County Population',
+          value: '7.14M',
+          subValue: 'Dallas, Tarrant, Collin, Denton',
+          delta: '+9.6% 5-Yr Suburban Surge',
+          deltaType: 'positive',
+          badge: '8.3M+ Full 11-County MSA',
+          spark: [6.51, 6.68, 6.84, 6.99, 7.14]
+        },
+        {
+          label: 'Regional Manufacturing Base',
+          value: '311K+',
+          subValue: 'Aerospace, Defense & Semiconductors',
+          delta: '~31% of All TX Factory Jobs',
+          deltaType: 'positive',
+          badge: '#1 Aerospace/Defense Hub',
+          spark: [288, 295, 302, 307, 311]
+        },
+        {
+          label: 'DFW Typical Home Value',
+          value: '$368,000',
+          subValue: 'Stabilizing Inventory (~4.2 Mos.)',
+          delta: '52% Below California Median',
+          deltaType: 'positive',
+          badge: 'In Line with U.S. ($366K)',
+          spark: [332, 378, 373, 370, 368]
+        },
+        {
+          label: 'Fortune 500 & "Y’all Street"',
+          value: '20+ HQs',
+          subValue: 'Financial & Corporate Hub',
+          delta: '2nd Largest U.S. Finance Workforce',
+          deltaType: 'positive',
+          badge: 'Top Corporate Relocation Metro',
+          spark: [17, 18, 19, 20, 21]
+        }
+      ]
+    };
+
+    // All 11 Texas Supersectors (BLS CES Sept 2026) + DFW Context
+    const sectorData = [
+      {
+        name: 'Trade, Transp. & Utilities',
+        txJobs: 2808.3,
+        txGrowth: 0.5,
+        dfwJobs: 892.4,
+        dfwGrowth: 0.7,
+        note: 'Largest employment supersector; anchored by DFW International Airport, Alliance logistics corridor, and Gulf Coast ports ($440B+ exports).'
+      },
+      {
+        name: 'Prof. & Business Services',
+        txJobs: 2192.0,
+        txGrowth: 2.0,
+        dfwJobs: 768.5,
+        dfwGrowth: 2.2,
+        note: 'Fastest-growing white-collar engine; fueled by Fortune 500 regional HQs, legal, consulting, and engineering services.'
+      },
+      {
+        name: 'Government',
+        txJobs: 2131.8,
+        txGrowth: 0.0,
+        dfwJobs: 472.1,
+        dfwGrowth: 0.4,
+        note: 'Public school districts, municipal infrastructure, higher education systems, and defense installations.'
+      },
+      {
+        name: 'Private Ed & Health Services',
+        txJobs: 2003.8,
+        txGrowth: 1.6,
+        dfwJobs: 534.0,
+        dfwGrowth: 1.9,
+        note: 'Recession-resistant demographic growth across UT Southwestern, Baylor Scott & White, and major hospital expansions.'
+      },
+      {
+        name: 'Leisure & Hospitality',
+        txJobs: 1555.4,
+        txGrowth: 0.8,
+        dfwJobs: 448.2,
+        dfwGrowth: 1.1,
+        note: 'Supported by sustained population inflows, convention business travel, and major global sporting events.'
+      },
+      {
+        name: 'Manufacturing',
+        txJobs: 990.6,
+        txGrowth: 1.3,
+        dfwJobs: 311.4,
+        dfwGrowth: 1.5,
+        note: 'Reached an 11-year state employment high; real output per worker is up ~26% since 2015 led by aerospace and semiconductors.'
+      },
+      {
+        name: 'Financial Activities',
+        txJobs: 940.6,
+        txGrowth: -0.1,
+        dfwJobs: 386.5,
+        dfwGrowth: 0.6,
+        note: 'DFW ("Y’all Street") banking, wealth management, and fintech expansion offsets statewide mortgage lending rate pressure.'
+      },
+      {
+        name: 'Construction',
+        txJobs: 921.6,
+        txGrowth: 2.1,
+        dfwJobs: 264.8,
+        dfwGrowth: 2.4,
+        note: 'Highest YoY percentage growth rate (+2.1% TX / +2.4% DFW); driven by data centers, industrial parks, and highway infrastructure.'
+      },
+      {
+        name: 'Other Services',
+        txJobs: 491.9,
+        txGrowth: 0.5,
+        dfwJobs: 146.2,
+        dfwGrowth: 0.6,
+        note: 'Equipment repair, personal care, and civic/professional trade associations.'
+      },
+      {
+        name: 'Information (Tech & Media)',
+        txJobs: 212.9,
+        txGrowth: -3.9,
+        dfwJobs: 88.4,
+        dfwGrowth: -3.4,
+        note: 'Experiencing post-pandemic SaaS/telecom restructuring and AI-driven white-collar efficiency consolidation.'
+      },
+      {
+        name: 'Mining & Logging (Oil & Gas)',
+        txJobs: 212.4,
+        txGrowth: -0.5,
+        dfwJobs: 37.5,
+        dfwGrowth: -0.3,
+        note: 'High GDP-per-worker contributor, though capital discipline keeps extraction headcount flat-to-slightly-down.'
+      }
+    ];
+
+    // Top 10 Texas Counties (2026)
+    const countyData = [
+      { name: 'Harris (Houston)', pop: 5.09, isDFW: false },
+      { name: 'Dallas (DFW)', pop: 2.66, isDFW: true },
+      { name: 'Tarrant (DFW)', pop: 2.27, isDFW: true },
+      { name: 'Bexar (San Antonio)', pop: 2.18, isDFW: false },
+      { name: 'Travis (Austin)', pop: 1.40, isDFW: false },
+      { name: 'Collin (DFW)', pop: 1.20, isDFW: true },
+      { name: 'Denton (DFW)', pop: 1.01, isDFW: true },
+      { name: 'Fort Bend (Houston)', pop: 0.92, isDFW: false },
+      { name: 'Hidalgo (McAllen)', pop: 0.90, isDFW: false },
+      { name: 'El Paso (El Paso)', pop: 0.88, isDFW: false }
+    ];
+
+    // Structural Drivers Scorecard
+    const driversData = [
+      {
+        title: 'New Job Growth Momentum',
+        category: 'POSITIVE',
+        rating: 'High Positive',
+        metric: '+159,400 Jobs YoY (#1 U.S.)',
+        summary: 'Texas payrolls expanded +1.0% YoY—roughly 3x the national pace (0.3%)—with DFW contributing 43,900 net new jobs across corporate, industrial, and healthcare sectors.'
+      },
+      {
+        title: 'Business Tax Climate & HQ Magnet',
+        category: 'POSITIVE',
+        rating: 'High Positive',
+        metric: '#5 Tax Rank • 0% Income Tax',
+        summary: 'Zero personal or corporate income tax and low per-capita tax collections ($5,737) continue to attract Fortune 500 relocations (57 HQs in TX; 20+ in DFW), outweighing gross-receipts margin tax friction.'
+      },
+      {
+        title: 'Domestic & Suburban Inflows',
+        category: 'POSITIVE',
+        rating: 'High Positive',
+        metric: '+2.47M Residents (2020–25)',
+        summary: 'DFW and Houston capture nearly two-thirds of Texas’s population gains. North Texas suburban counties (Collin, Denton) lead in corporate campus and household formation.'
+      },
+      {
+        title: 'Housing Affordability Advantage',
+        category: 'POSITIVE',
+        rating: 'Moderate Positive',
+        metric: '$294.3K TX vs. $774.6K CA',
+        summary: 'With typical TX home values down 1.4% YoY and active inventory rising (~158K listings), Texas preserves a massive cost-of-living advantage over coastal tech and finance hubs.'
+      },
+      {
+        title: 'Educational Attainment Gap',
+        category: 'NEGATIVE',
+        rating: 'Structural Constraint',
+        metric: '35.5% TX vs. 36.5% U.S.',
+        summary: 'While DFW (38.4%) and Austin exceed national norms, statewide bachelor’s degree+ attainment trails the U.S. (36.5%) and California (37.1%), requiring targeted workforce upskilling.'
+      },
+      {
+        title: 'Interest Rate & Oil/Gas Headwinds',
+        category: 'NEGATIVE',
+        rating: 'Moderate Negative',
+        metric: 'Info -3.9% • Mining -0.5%',
+        summary: 'Elevated interest rates have tempered single-family permitting and mortgage finance, while capital discipline in oil & gas and AI restructuring in tech/media weigh on select payrolls.'
+      }
+    ];
+
+    // Chart instances
+    let sectorChartInstance = null;
+    let benchmarkChartInstance = null;
+    let countyChartInstance = null;
+
+    // =========================================================================
+    // 2. UI & SCOPE UPDATERS
+    // =========================================================================
+    function setScope(newScope) {
+      state.scope = newScope;
+
+      // Update toggle buttons
+      const btnTx = document.getElementById('btn-scope-tx');
+      const btnDfw = document.getElementById('btn-scope-dfw');
+      if (newScope === 'TX') {
+        btnTx.className = 'px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all bg-white text-navy-900 shadow-sm';
+        btnDfw.className = 'px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-300 hover:text-white';
+      } else {
+        btnDfw.className = 'px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all bg-amber-500 text-navy-950 shadow-sm';
+        btnTx.className = 'px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-300 hover:text-white';
+      }
+
+      updateNarrativeBanner();
+      renderKPICards();
+      renderSectorChart();
+    }
+
+    function toggleCompare() {
+      state.showCompare = !state.showCompare;
+      const banner = document.getElementById('comparison-banner');
+      const btn = document.getElementById('btn-compare');
+      const dot = document.getElementById('compare-dot');
+
+      if (state.showCompare) {
+        banner.classList.remove('hidden');
+        btn.classList.add('bg-amber-500/15', 'text-amber-300', 'border-amber-500/50');
+        btn.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700');
+        dot.classList.replace('bg-slate-500', 'bg-amber-400');
+      } else {
+        banner.classList.add('hidden');
+        btn.classList.remove('bg-amber-500/15', 'text-amber-300', 'border-amber-500/50');
+        btn.classList.add('bg-slate-800', 'text-slate-400', 'border-slate-700');
+        dot.classList.replace('bg-amber-400', 'bg-slate-500');
+      }
+    }
+
+    function updateNarrativeBanner() {
+      const badge = document.getElementById('thesis-badge');
+      const headline = document.getElementById('thesis-headline');
+      const body = document.getElementById('thesis-body');
+      const kpiTitle = document.getElementById('kpi-section-title');
+      const sectorTitle = document.getElementById('sector-chart-title');
+      const sectorSub = document.getElementById('sector-chart-subtitle');
+
+      if (state.scope === 'TX') {
+        badge.textContent = 'Executive Thesis • Texas Macroeconomic Leadership';
+        headline.textContent = 'America’s #2 Economy ($2.93T GSP) Outpaces National Job Growth 3-to-1, Powered by Corporate Relocations and a 62% Housing Cost Advantage Over California.';
+        body.innerHTML = 'Texas added <strong class="text-white">159,400 nonfarm jobs YoY (#1 in the U.S.)</strong> and now hosts <strong class="text-white">57 Fortune 500 headquarters</strong>. With a typical home price of <strong class="text-emerald-400">$294,311</strong>—less than two-fifths of California’s $774,582 median and 20% below the U.S. benchmark ($366,019)—Texas sustains inward migration while the <strong class="text-amber-300">Dallas–Fort Worth metro (4.35M jobs)</strong> anchors ~30% of total state employment.';
+        kpiTitle.textContent = 'Texas Statewide Macroeconomic Scorecard (2026)';
+        sectorTitle.textContent = 'Texas Nonfarm Employment & YoY Growth Across All 11 Supersectors';
+        sectorSub.textContent = 'Construction (+2.1%) and Professional & Business Services (+2.0%) lead expansion, while Information (-3.9%) undergoes AI/tech restructuring.';
+      } else {
+        badge.textContent = 'Executive Thesis • Dallas–Fort Worth (DFW) Regional Engine';
+        headline.textContent = 'With 4.35 Million Jobs and 30.1% of Texas Employment, DFW Combines Fortune 500 Scale, "Y’all Street" Finance, and Advanced Aerospace Manufacturing.';
+        body.innerHTML = 'The Dallas–Fort Worth–Arlington MSA added <strong class="text-white">43,900 jobs YoY (+1.0%)</strong>, propelled by <strong class="text-amber-300">7.14 million residents across its core 4 counties</strong> (Dallas, Tarrant, Collin, Denton). DFW boasts <strong class="text-emerald-400">38.4% bachelor’s degree+ attainment</strong> (above both Texas and U.S. averages), 311K+ manufacturing jobs, and a stabilizing <strong class="text-white">$368,000 typical home value</strong>—more than 52% below California.';
+        kpiTitle.textContent = 'Dallas–Fort Worth–Arlington (DFW) Metro Scorecard (2026)';
+        sectorTitle.textContent = 'DFW Metro Nonfarm Employment & YoY Growth Across All 11 Supersectors';
+        sectorSub.textContent = 'DFW outperforms statewide growth in Financial Activities (+0.6% vs. -0.1% TX), Prof. Services (+2.2%), and Construction (+2.4%).';
+      }
+    }
+
+    // Generate clean inline SVG sparkline for KPI cards
+    function createSparklineSVG(values, colorHex) {
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const range = max - min || 1;
+      const width = 84;
+      const height = 28;
+      const points = values.map((v, i) => {
+        const x = (i / (values.length - 1)) * width;
+        const y = height - ((v - min) / range) * (height - 6) - 3;
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      }).join(' ');
+
+      return `
+        <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" class="overflow-visible">
+          <polyline fill="none" stroke="${colorHex}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" points="${points}" />
+        </svg>
+      `;
+    }
+
+    function renderKPICards() {
+      const container = document.getElementById('kpi-grid');
+      const items = kpiData[state.scope];
+
+      container.innerHTML = items.map(item => {
+        const isPos = item.deltaType === 'positive';
+        const deltaBadgeClass = isPos
+          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+          : 'bg-slate-100 text-slate-700 border-slate-200';
+        const sparkColor = isPos ? '#059669' : '#D97706';
+
+        return `
+          <div class="editorial-card rounded-2xl p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-start justify-between gap-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">${item.label}</span>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-navy-900 text-amber-300">
+                  ${item.badge}
+                </span>
+              </div>
+              <div class="mt-3 flex items-baseline justify-between gap-2">
+                <div>
+                  <div class="text-2xl sm:text-3xl font-extrabold tracking-tight text-navy-900">${item.value}</div>
+                  <div class="text-xs font-medium text-slate-500 mt-0.5">${item.subValue}</div>
+                </div>
+                <div class="shrink-0" title="5-Year Directional Trend">
+                  ${createSparklineSVG(item.spark, sparkColor)}
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold border ${deltaBadgeClass}">
+                ${item.delta}
+              </span>
+              <span class="text-[11px] text-slate-400">2021–2026 Trend</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 3. CHART A: SECTOR EMPLOYMENT & YOY GROWTH COMBO CHART
+    // =========================================================================
+    function setSectorSort(sortBy) {
+      state.sectorSort = sortBy;
+      const btnJobs = document.getElementById('sort-jobs');
+      const btnGrowth = document.getElementById('sort-growth');
+
+      if (sortBy === 'jobs') {
+        btnJobs.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg bg-navy-900 text-white shadow-sm transition-all';
+        btnGrowth.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-navy-900 transition-all';
+      } else {
+        btnGrowth.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg bg-navy-900 text-white shadow-sm transition-all';
+        btnJobs.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-navy-900 transition-all';
+      }
+      renderSectorChart();
+    }
+
+    function renderSectorChart() {
+      const ctx = document.getElementById('sectorChart').getContext('2d');
+      const isTX = state.scope === 'TX';
+
+      const sorted = [...sectorData].sort((a, b) => {
+        if (state.sectorSort === 'jobs') {
+          return (isTX ? b.txJobs : b.dfwJobs) - (isTX ? a.txJobs : a.dfwJobs);
+        } else {
+          return (isTX ? b.txGrowth : b.dfwGrowth) - (isTX ? a.txGrowth : a.dfwGrowth);
+        }
+      });
+
+      const labels = sorted.map(d => d.name);
+      const jobsValues = sorted.map(d => isTX ? d.txJobs : d.dfwJobs);
+      const growthValues = sorted.map(d => isTX ? d.txGrowth : d.dfwGrowth);
+
+      if (sectorChartInstance) {
+        sectorChartInstance.destroy();
+      }
+
+      sectorChartInstance = new Chart(ctx, {
+        data: {
+          labels,
+          datasets: [
+            {
+              type: 'bar',
+              label: isTX ? 'Texas Employment (000s)' : 'DFW Employment (000s)',
+              data: jobsValues,
+              backgroundColor: 'rgba(15, 23, 42, 0.88)',
+              hoverBackgroundColor: '#0F172A',
+              borderRadius: 6,
+              yAxisID: 'yJobs',
+              order: 2
+            },
+            {
+              type: 'line',
+              label: isTX ? 'TX 12-Mo Job Growth (%)' : 'DFW 12-Mo Job Growth (%)',
+              data: growthValues,
+              borderColor: '#D97706',
+              backgroundColor: growthValues.map(v => v >= 0 ? '#059669' : '#DC2626'),
+              pointBorderColor: '#FFFFFF',
+              pointBorderWidth: 2,
+              pointRadius: 6,
+              pointHoverRadius: 8,
+              borderWidth: 2.5,
+              tension: 0.25,
+              yAxisID: 'yGrowth',
+              order: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              align: 'end',
+              labels: {
+                usePointStyle: true,
+                boxWidth: 8,
+                font: { family: 'Inter', size: 12, weight: '600' },
+                color: '#334155'
+              }
+            },
+            tooltip: {
+              backgroundColor: '#0F172A',
+              titleFont: { family: 'Inter', size: 13, weight: '700' },
+              bodyFont: { family: 'Inter', size: 12 },
+              padding: 12,
+              cornerRadius: 10,
+              callbacks: {
+                afterBody: function(context) {
+                  const idx = context[0].dataIndex;
+                  const note = sorted[idx].note;
+                  // Wrap note into lines of ~52 chars
+                  const words = note.split(' ');
+                  const lines = [''];
+                  words.forEach(w => {
+                    if ((lines[lines.length - 1] + ' ' + w).length > 54) {
+                      lines.push(w);
+                    } else {
+                      lines[lines.length - 1] = (lines[lines.length - 1] + ' ' + w).trim();
+                    }
+                  });
+                  return ['\nExecutive Takeaway:', ...lines];
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: {
+                font: { family: 'Inter', size: 11, weight: '600' },
+                color: '#334155',
+                maxRotation: 35,
+                minRotation: 20
+              }
+            },
+            yJobs: {
+              type: 'linear',
+              position: 'left',
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Nonfarm Jobs (Thousands)',
+                font: { family: 'Inter', size: 11, weight: '600' },
+                color: '#475569'
+              },
+              grid: { color: '#F1F5F9' },
+              ticks: {
+                font: { family: 'Inter', size: 11 },
+                color: '#475569',
+                callback: v => v.toLocaleString() + 'k'
+              }
+            },
+            yGrowth: {
+              type: 'linear',
+              position: 'right',
+              suggestedMin: -4.5,
+              suggestedMax: 3.0,
+              title: {
+                display: true,
+                text: 'YoY Job Growth (%)',
+                font: { family: 'Inter', size: 11, weight: '600' },
+                color: '#B45309'
+              },
+              grid: { drawOnChartArea: false },
+              ticks: {
+                font: { family: 'Inter', size: 11, weight: '600' },
+                color: '#B45309',
+                callback: v => (v > 0 ? '+' : '') + v.toFixed(1) + '%'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 4. CHART B: PEER BENCHMARK COMPARISON (TX, DFW, CA, U.S.)
+    // =========================================================================
+    function updateBenchmarkChart() {
+      const mode = document.getElementById('benchmark-metric').value;
+      const caption = document.getElementById('benchmark-caption');
+      const ctx = document.getElementById('benchmarkChart').getContext('2d');
+
+      if (benchmarkChartInstance) {
+        benchmarkChartInstance.destroy();
+      }
+
+      if (mode === 'rates') {
+        caption.textContent = 'Comparing YoY job growth, 5-year population expansion (2020–2025), and adult bachelor’s degree attainment (%).';
+        benchmarkChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['YoY Job Growth (%)', '5-Yr Pop. Growth (%)', 'Bachelor’s Degree+ (%)'],
+            datasets: [
+              {
+                label: 'Texas',
+                data: [1.0, 8.8, 35.5],
+                backgroundColor: '#0F172A',
+                borderRadius: 6
+              },
+              {
+                label: 'DFW Metro',
+                data: [1.0, 9.6, 38.4],
+                backgroundColor: '#D97706',
+                borderRadius: 6
+              },
+              {
+                label: 'California',
+                data: [0.8, 0.3, 37.1],
+                backgroundColor: '#94A3B8',
+                borderRadius: 6
+              },
+              {
+                label: 'U.S. Average',
+                data: [0.3, 3.1, 36.5],
+                backgroundColor: '#CBD5E1',
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: { usePointStyle: true, boxWidth: 8, font: { family: 'Inter', size: 11, weight: '600' } }
+              },
+              tooltip: {
+                backgroundColor: '#0F172A',
+                callbacks: {
+                  label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}%`
+                }
+              }
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11, weight: '600' } } },
+              y: {
+                beginAtZero: true,
+                grid: { color: '#F1F5F9' },
+                ticks: { callback: v => v + '%', font: { family: 'Inter', size: 11 } }
+              }
+            }
+          }
+        });
+      } else {
+        caption.textContent = 'Typical home value comparison (Zillow ZHVI, Oct 2026): Texas is 62% more affordable than California.';
+        benchmarkChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Texas Statewide', 'DFW Metro', 'U.S. National', 'California Statewide'],
+            datasets: [
+              {
+                label: 'Typical Home Value ($ USD)',
+                data: [294311, 368000, 366019, 774582],
+                backgroundColor: ['#059669', '#D97706', '#64748B', '#0F172A'],
+                borderRadius: 8,
+                barThickness: 46
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: '#0F172A',
+                callbacks: {
+                  label: ctx => 'Typical Home Value: $' + ctx.parsed.y.toLocaleString()
+                }
+              }
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11, weight: '600' } } },
+              y: {
+                beginAtZero: true,
+                grid: { color: '#F1F5F9' },
+                ticks: {
+                  callback: v => '$' + (v / 1000).toFixed(0) + 'K',
+                  font: { family: 'Inter', size: 11 }
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // =========================================================================
+    // 5. CHART C: TOP 10 TEXAS COUNTIES HORIZONTAL BAR CHART
+    // =========================================================================
+    function renderCountyChart() {
+      const ctx = document.getElementById('countyChart').getContext('2d');
+      if (countyChartInstance) {
+        countyChartInstance.destroy();
+      }
+
+      countyChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: countyData.map(c => c.name),
+          datasets: [
+            {
+              label: '2026 Population (Millions)',
+              data: countyData.map(c => c.pop),
+              backgroundColor: countyData.map(c => c.isDFW ? '#D97706' : '#0F172A'),
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0F172A',
+              callbacks: {
+                label: ctx => {
+                  const item = countyData[ctx.dataIndex];
+                  const tag = item.isDFW ? ' [DFW Core County]' : '';
+                  return `Population: ${item.pop.toFixed(2)}M${tag}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              grid: { color: '#F1F5F9' },
+              ticks: {
+                callback: v => v.toFixed(1) + 'M',
+                font: { family: 'Inter', size: 11 }
+              }
+            },
+            y: {
+              grid: { display: false },
+              ticks: {
+                font: { family: 'Inter', size: 11, weight: '600' },
+                color: '#1E293B'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 6. STRUCTURAL DRIVERS SCORECARD RENDERER
+    // =========================================================================
+    function filterDrivers(filterVal) {
+      state.driverFilter = filterVal;
+
+      document.querySelectorAll('.driver-filter-btn').forEach(btn => {
+        if (btn.dataset.filter === filterVal) {
+          btn.className = 'driver-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-navy-900 text-white transition-all';
+        } else {
+          btn.className = 'driver-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all';
+        }
+      });
+
+      renderDrivers();
+    }
+
+    function renderDrivers() {
+      const grid = document.getElementById('drivers-grid');
+      const filtered = driversData.filter(d => {
+        if (state.driverFilter === 'ALL') return true;
+        return d.category === state.driverFilter;
+      });
+
+      grid.innerHTML = filtered.map(d => {
+        const isPos = d.category === 'POSITIVE';
+        const badgeStyle = isPos
+          ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+          : 'bg-amber-50 text-amber-800 border-amber-200';
+        const dotStyle = isPos ? 'bg-emerald-500' : 'bg-amber-500';
+
+        return `
+          <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-5 flex flex-col justify-between hover:bg-white transition-all">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2.5">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${badgeStyle}">
+                  <span class="w-1.5 h-1.5 rounded-full ${dotStyle}"></span>
+                  ${d.rating}
+                </span>
+                <span class="text-xs font-bold text-navy-900">${d.metric}</span>
+              </div>
+              <h4 class="text-base font-bold text-navy-900">${d.title}</h4>
+              <p class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">${d.summary}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 7. INITIALIZE DASHBOARD ON LOAD
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      renderKPICards();
+      renderSectorChart();
+      updateBenchmarkChart();
+      renderCountyChart();
+      renderDrivers();
+    });
+  </script>
+</body>
+</html>
